@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skinimalist LP（トーン調整・テキスト削減版）｜エステティック通信</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ── 基本3色 ── */
+  --blue:    #9dbde4;   /* アテンション（ボタン・強調・数字） */
+  --bg:      #f5f5f5;   /* 背景（薄いグレー） */
+  --text:    #6C676E;   /* テキスト */
+  /* ── 上記から派生した補助色 ── */
+  --blue-d:  #4F80B3;   /* 白地上の小さな強調文字用（読みやすさ確保） */
+  --blue-lt: #E9F0F9;   /* 淡いブルー（ハイライト・タグ） */
+  --ink:     #4A464D;   /* 見出し用の濃いグレー */
+  --line:    #E1E1E4;
+  --white:   #ffffff;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  color: var(--text);
+  line-height: 1.85;
+  font-size: 15px;
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  word-break: auto-phrase;
+  line-break: strict;
+}
+h1, h2, h3, .ct, .pt-ttl { text-wrap: balance; }
+p, .pt-tx, .sx, .fa { text-wrap: pretty; }
+.nw { white-space: nowrap; }
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* ══════════ PC背景 ══════════ */
+#bg-deco {
+  position: fixed; inset: 0; z-index: 0; display: none;
+  background: linear-gradient(150deg, #f7f7f8 0%, #ececef 100%);
+}
+#bg-deco .bg-ttl, #bg-deco .bg-ttl2 {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  writing-mode: vertical-rl; font-size: 13px; letter-spacing: .42em;
+  color: rgba(108,103,110,.35); font-weight: 700;
+}
+#bg-deco .bg-ttl  { left: 40px; }
+#bg-deco .bg-ttl2 { right: 40px; }
+
+/* ══════════ 本体：スマホ幅カラム ══════════ */
+#wrap {
+  max-width: 480px; margin: 0 auto; background: var(--white);
+  position: relative; z-index: 1;
+  box-shadow: 0 0 50px rgba(74,70,77,.14);
+  padding-bottom: 76px;
+}
+
+#prog {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%; z-index: 1200;
+  background: var(--blue); transition: width .1s linear;
+}
+
+/* ══════════ セクション ══════════ */
+.sec { padding: 46px 20px; position: relative; }
+.sec.white { background: var(--white); }
+.sec.gray  { background: var(--bg); }
+
+.sec-tag {
+  font-size: 10px; letter-spacing: .2em; font-weight: 700;
+  color: var(--blue-d); text-transform: uppercase; text-align: center; margin-bottom: 8px;
+}
+.sec-ttl {
+  font-size: 21px; font-weight: 800; line-height: 1.5;
+  text-align: center; color: var(--ink); margin-bottom: 6px;
+}
+.sec-ttl em { font-style: normal; color: var(--blue-d); }
+.sec-ttl mark { background: linear-gradient(transparent 62%, var(--blue-lt) 62%); color: inherit; padding: 0 2px; }
+.sec-lead { font-size: 13.5px; color: var(--text); text-align: center; margin-bottom: 26px; line-height: 1.95; }
+.sec-bar { width: 36px; height: 3px; background: var(--blue); margin: 13px auto 24px; }
+
+/* スクロール演出（JSが動かなくても内容は必ず見える） */
+body.js-anim .reveal { opacity: 0; transform: translateY(22px); }
+body.js-anim .reveal.on { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1); }
+
+/* ══════════ 注釈：画像仕様（依頼サイズ確認用） ══════════ */
+.anno-switch {
+  position: fixed; top: 62px; left: 8px;
+  z-index: 3000; background: var(--text); color: #fff; border: none; opacity: .92;
+  padding: 6px 12px; border-radius: 20px; font-size: 10.5px; font-weight: 700;
+  cursor: pointer; box-shadow: 0 3px 14px rgba(74,70,77,.35); font-family: inherit; white-space: nowrap;
+}
+.anno-switch.off { background: #a9a6ab; }
+.img-slot { position: relative; }
+.img-slot .spec {
+  position: absolute; top: 6px; right: 6px; z-index: 20;
+  background: rgba(74,70,77,.92); color: #fff; font-size: 9.5px; font-weight: 700;
+  line-height: 1.45; padding: 4px 8px; border-radius: 4px; cursor: pointer;
+  text-align: left; max-width: 82%;
+}
+.img-slot .spec .badge { display: inline-block; font-size: 8.5px; padding: 1px 5px; border-radius: 2px; margin-right: 4px; background: var(--blue); color: var(--ink); }
+.img-slot .spec .badge.new { background: #c2776a; }
+.img-slot .spec-detail { display: none; margin-top: 5px; padding-top: 5px; border-top: 1px solid rgba(255,255,255,.35); font-weight: 400; font-size: 9.5px; }
+.img-slot .spec.open .spec-detail { display: block; }
+.img-slot::after { content: ""; position: absolute; inset: 0; z-index: 10; pointer-events: none; border: 2px dashed rgba(157,189,228,.9); }
+body.no-anno .img-slot::after, body.no-anno .img-slot .spec { display: none; }
+
+/* 画像枠：元画像の縦横比を保ち、全体を見せる（トリミング・歪みなし） */
+.fit { width: 100%; height: 100%; object-fit: contain; }
+
+/* ══════════ ヘッダー ══════════ */
+#hd {
+  position: sticky; top: 0; z-index: 900; background: rgba(255,255,255,.96);
+  backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between;
+  padding: 0 14px; height: 54px; border-bottom: 1px solid var(--line);
+}
+#hd img { height: 22px; width: auto; }
+#hd .hd-btn { background: var(--blue); color: var(--ink); font-size: 12px; font-weight: 800; padding: 8px 15px; border-radius: 4px; }
+
+/* ══════════ ① FV：ビジュアルを全面に見せ、テキストは下へ ══════════ */
+#fv-img { aspect-ratio: 720 / 1240; background: var(--bg); }
+#fv-text { padding: 28px 20px 34px; text-align: center; background: var(--white); }
+#fv-text .eyebrow {
+  display: inline-block; background: var(--blue-lt); color: var(--blue-d);
+  font-size: 10px; font-weight: 700; letter-spacing: .16em; padding: 5px 12px; margin-bottom: 14px; border-radius: 2px;
+}
+#fv-text h1 { font-size: 22px; font-weight: 800; line-height: 1.6; color: var(--ink); margin-bottom: 14px; }
+#fv-text .big { font-size: 52px; font-weight: 900; color: var(--blue-d); line-height: 1; letter-spacing: -.03em; }
+#fv-text .big small { font-size: 20px; font-weight: 800; margin-left: 2px; color: var(--ink); }
+#fv-text .big-sub { font-size: 13px; color: var(--text); margin: 6px 0 22px; }
+#fv-text .fv-note { font-size: 11px; color: var(--text); margin-top: 14px; }
+
+/* ══════════ CTAボタン（すべて下部フォームへ遷移） ══════════ */
+.btn {
+  display: block; width: 100%; text-align: center; border-radius: 7px;
+  font-weight: 800; letter-spacing: .02em; padding: 16px 12px; font-size: 17px;
+  border: none; cursor: pointer; font-family: inherit; line-height: 1.4;
+  position: relative; overflow: hidden;
+  background: var(--blue); color: var(--ink); box-shadow: 0 5px 16px rgba(157,189,228,.42);
+}
+.btn .sm { display: block; font-size: 11px; font-weight: 600; opacity: .92; margin-top: 2px; }
+.btn.shine::before {
+  content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.5), transparent);
+  animation: shine 3.4s ease-in-out infinite;
+}
+@keyframes shine { 0% { left: -60%; } 42%, 100% { left: 130%; } }
+@media (prefers-reduced-motion: reduce) { .btn.shine::before { animation: none; } }
+
+/* ══════════ ② KPI ══════════ */
+#kpi { background: var(--bg); padding: 6px 0 0; }
+#kpi .grid { display: grid; grid-template-columns: 1fr 1fr; }
+#kpi .cell { padding: 22px 10px; text-align: center; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#kpi .cell:nth-child(2n) { border-right: none; }
+#kpi .cell:nth-child(n+3) { border-bottom: none; }
+#kpi .n { font-size: 34px; font-weight: 900; color: var(--blue-d); line-height: 1; }
+#kpi .n u { font-size: 14px; font-weight: 700; text-decoration: none; margin-left: 1px; color: var(--ink); }
+#kpi .l { font-size: 11px; color: var(--text); line-height: 1.55; margin-top: 7px; }
+#kpi .cap { text-align: center; font-size: 10px; color: #8e8a91; padding: 4px 20px 16px; }
+
+/* ══════════ ③ お悩み ══════════ */
+.worry { display: grid; gap: 9px; }
+.worry li {
+  list-style: none; background: var(--white); border: 1px solid var(--line); border-radius: 8px;
+  padding: 14px 16px; font-size: 14px; font-weight: 700; color: var(--ink);
+  display: flex; gap: 10px; align-items: flex-start; line-height: 1.65;
+}
+.worry li::before { content: "✓"; color: var(--blue); font-weight: 900; flex-shrink: 0; font-size: 15px; }
+.worry-end { text-align: center; font-size: 16px; font-weight: 800; color: var(--ink); margin-top: 24px; line-height: 1.75; }
+.worry-end mark { background: linear-gradient(transparent 60%, var(--blue-lt) 60%); }
+
+/* ══════════ ④ 売上の天井 ══════════ */
+.bars { margin: 22px 0 18px; }
+.bar-row { margin-bottom: 17px; }
+.bar-lb { font-size: 12.5px; font-weight: 700; color: var(--ink); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.bar-lb span:last-child { color: var(--blue-d); font-weight: 800; }
+.bar-tr { background: var(--bg); border-radius: 4px; height: 26px; overflow: hidden; }
+.bar-fl { height: 100%; border-radius: 4px; }
+@keyframes barGrow { from { width: 0; } }
+body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1); }
+.bar-fl.cap  { background: #b9b6bc; }
+.bar-fl.grow { background: var(--blue); }
+.insight {
+  background: var(--white); border: 2px solid var(--blue); border-radius: 8px;
+  padding: 17px; font-size: 14px; line-height: 1.9; color: var(--ink); text-align: center; font-weight: 700;
+}
+.insight b { color: var(--blue-d); font-size: 20px; }
+
+/* ══════════ ⑤ コンセプト ══════════ */
+.hero-img { aspect-ratio: 720 / 540; background: var(--bg); border-radius: 10px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--line); }
+.concept-badges { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 18px; }
+.concept-badges span { border: 1px solid var(--blue); color: var(--blue-d); background: var(--white); font-size: 11px; padding: 5px 12px; border-radius: 2px; font-weight: 700; }
+
+/* ══════════ 中間CTA ══════════ */
+.cta-block { padding: 38px 20px; text-align: center; background: var(--bg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.cta-block .ct { font-size: 20px; font-weight: 800; line-height: 1.55; margin-bottom: 18px; color: var(--ink); }
+.cta-block .ct em { font-style: normal; color: var(--blue-d); }
+
+/* ══════════ ⑦ 3つの理由 ══════════ */
+.pts { display: grid; gap: 14px; }
+.pt { background: var(--white); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.pt-hd { background: var(--bg); color: var(--ink); padding: 10px 14px; font-size: 12px; letter-spacing: .1em; font-weight: 800; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line); }
+.pt-hd i { color: var(--blue); font-style: normal; font-weight: 900; font-size: 15px; }
+.pt-bd { padding: 15px; display: flex; gap: 14px; align-items: center; }
+.pt-bd .ico { width: 74px; flex-shrink: 0; aspect-ratio: 1 / 1; border-radius: 6px; overflow: hidden; background: var(--bg); }
+.pt-ttl { font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1.5; margin-bottom: 4px; }
+.pt-tx { font-size: 12.5px; color: var(--text); line-height: 1.8; }
+
+/* ══════════ ⑧ 製品 ══════════ */
+.prods { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.prod { background: var(--white); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+.prod .ph { background: var(--bg); aspect-ratio: 1 / 1; padding: 10px; }
+.prod .in { padding: 10px 11px 8px; flex: 1; display: flex; flex-direction: column; }
+.prod .cat { font-size: 10px; color: var(--blue-d); font-weight: 700; }
+.prod .nm { font-size: 12px; font-weight: 800; color: var(--ink); line-height: 1.4; margin: 3px 0 4px; }
+.prod .pr { font-size: 14px; font-weight: 800; color: var(--ink); }
+.prod .pr small { font-size: 9.5px; color: var(--text); font-weight: 400; }
+.prod .cc { font-size: 10.5px; color: var(--text); margin: 4px 0 8px; line-height: 1.55; }
+.prod .db { margin-top: auto; background: var(--blue); color: var(--ink); border: none; padding: 9px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; border-radius: 3px; }
+.concerns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px; }
+.concern { border-radius: 6px; overflow: hidden; background: var(--white); border: 1px solid var(--line); }
+.concern .cimg { aspect-ratio: 758 / 432; background: var(--bg); }
+.concern .cp { text-align: center; font-size: 11px; font-weight: 700; color: var(--ink); padding: 6px 4px; }
+
+/* ══════════ ⑪ サポート ══════════ */
+.sup { display: grid; gap: 9px; }
+.sup-item { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.sup-item .no { width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: var(--ink); font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sup-item .st { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
+.sup-item .sx { font-size: 12.5px; color: var(--text); line-height: 1.75; }
+.ph-slot {
+  background: repeating-linear-gradient(45deg, #f5f5f5, #f5f5f5 10px, #ebebed 10px, #ebebed 20px);
+  border: 2px dashed #c4c2c7; border-radius: 8px; aspect-ratio: 720 / 405;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 16px; margin-top: 14px;
+}
+.ph-slot .pt2 { font-size: 12.5px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.ph-slot .px { font-size: 10.5px; color: #8e8a91; line-height: 1.65; }
+
+/* ══════════ ⑫ 声 ══════════ */
+.voices { display: grid; gap: 11px; }
+.voice { background: var(--white); border-radius: 10px; padding: 16px; border: 1px solid var(--line); border-left: 4px solid var(--blue); }
+.voice .vh { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+.voice .av { width: 56px; aspect-ratio: 1 / 1; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #8e8a91; flex-shrink: 0; border: 1px dashed #c4c2c7; text-align: center; line-height: 1.3; }
+.voice .vn { font-size: 13px; font-weight: 800; color: var(--ink); line-height: 1.4; }
+.voice .vm { font-size: 11px; color: var(--text); }
+.voice .vt { font-size: 13px; color: var(--text); line-height: 1.85; }
+.voice .vr { margin-top: 10px; background: var(--blue-lt); border-radius: 6px; padding: 8px 10px; font-size: 12px; font-weight: 700; color: var(--ink); text-align: center; }
+.voice .vr b { color: var(--blue-d); font-size: 14px; }
+
+/* ══════════ ⑬ 流れ ══════════ */
+.flow { position: relative; padding-left: 6px; }
+.flow-step { display: flex; gap: 14px; position: relative; padding-bottom: 22px; }
+.flow-step:last-child { padding-bottom: 0; }
+.flow-step .ln { position: absolute; left: 17px; top: 38px; bottom: 0; width: 2px; background: var(--blue-lt); }
+.flow-step:last-child .ln { display: none; }
+.flow-step .no { width: 36px; height: 36px; border-radius: 50%; background: var(--white); color: var(--blue-d); font-size: 14px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid var(--blue); z-index: 2; position: relative; }
+.flow-step .ft { font-size: 14.5px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
+.flow-step .fx { font-size: 12.5px; color: var(--text); line-height: 1.75; }
+
+/* ══════════ ⑭ 約束 ══════════ */
+.promise { background: var(--white); border: 2px solid var(--blue); border-radius: 10px; padding: 24px 18px; text-align: center; }
+.promise .pt3 { font-size: 19px; font-weight: 900; color: var(--ink); line-height: 1.55; margin-bottom: 10px; }
+.promise .px2 { font-size: 13px; color: var(--text); line-height: 1.9; }
+.know { display: grid; gap: 8px; margin-top: 20px; }
+.know li { list-style: none; background: var(--white); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--ink); font-weight: 700; display: flex; gap: 9px; align-items: flex-start; line-height: 1.7; border: 1px solid var(--line); }
+.know li::before { content: "✓"; color: var(--blue); font-weight: 900; flex-shrink: 0; }
+
+/* ══════════ ⑯ FAQ ══════════ */
+.faq { background: var(--white); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 9px; overflow: hidden; }
+.faq summary { font-size: 13.5px; font-weight: 700; color: var(--ink); padding: 14px 16px; cursor: pointer; display: flex; gap: 9px; align-items: flex-start; list-style: none; line-height: 1.65; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before { content: "Q"; color: var(--blue); font-weight: 900; flex-shrink: 0; }
+.faq summary::after { content: "＋"; margin-left: auto; color: var(--text); font-size: 14px; flex-shrink: 0; transition: transform .25s; }
+.faq[open] summary::after { transform: rotate(45deg); }
+.faq .fa { font-size: 12.5px; color: var(--text); padding: 0 16px 15px 38px; line-height: 1.9; }
+
+/* ══════════ ⑰ 会社 ══════════ */
+.corp { display: grid; gap: 11px; }
+.corp-box { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+.corp-box .cn2 { font-size: 14px; font-weight: 800; color: var(--blue-d); margin-bottom: 4px; }
+.corp-box .cx { font-size: 12.5px; color: var(--text); line-height: 1.8; }
+.corp-logo { width: 148px; aspect-ratio: 600 / 115; margin: 0 auto 20px; }
+
+/* ══════════ お問い合わせフォーム（latinou LPと同一項目） ══════════ */
+#contact { background: var(--bg); padding: 48px 20px 52px; scroll-margin-top: 54px; }
+.form-card { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 22px 18px 24px; margin-top: 4px; }
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+.form-label span { display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 700; color: var(--ink); background: var(--blue); padding: 1px 6px; border-radius: 2px; vertical-align: 1px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; font-family: inherit; font-size: 16px; color: var(--ink);
+  background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px 12px; outline: none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: #a9a6ab; }
+.form-select { appearance: none; cursor: pointer; background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%), linear-gradient(135deg, var(--text) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--blue); background: var(--white); }
+.form-textarea { resize: vertical; min-height: 110px; }
+.form-submit { margin-top: 4px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-success { display: none; text-align: center; padding: 26px 8px; }
+.form-success p { font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.form-success small { font-size: 13px; color: var(--text); }
+
+#ft { background: var(--text); color: rgba(255,255,255,.85); padding: 26px 20px 30px; text-align: center; font-size: 11px; line-height: 1.85; }
+
+/* ══════════ スティッキーCTA ══════════ */
+#sticky {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(115%);
+  width: 100%; max-width: 480px; z-index: 1000;
+  background: rgba(255,255,255,.97); backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line); box-shadow: 0 -4px 20px rgba(74,70,77,.12);
+  padding: 9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
+  transition: transform .38s cubic-bezier(.22,1,.36,1);
+}
+#sticky.show { transform: translateX(-50%) translateY(0); }
+#sticky .btn { padding: 13px 8px; font-size: 15px; }
+
+#toTop {
+  position: fixed; z-index: 999; right: 14px; bottom: 86px;
+  width: 42px; height: 42px; border-radius: 50%; background: var(--white);
+  border: 1px solid var(--line); box-shadow: 0 3px 12px rgba(74,70,77,.16);
+  color: var(--ink); font-size: 16px; cursor: pointer; display: none;
+  align-items: center; justify-content: center; font-family: inherit;
+}
+#toTop.show { display: flex; }
+
+/* ══════════ モーダル ══════════ */
+.ov-m { display: none; position: fixed; inset: 0; z-index: 4000; background: rgba(74,70,77,.7); align-items: center; justify-content: center; padding: 20px; }
+.ov-m.show { display: flex; }
+.mbox { background: #fff; border-radius: 10px; max-width: 400px; width: 100%; max-height: 86vh; overflow-y: auto; position: relative; }
+.mclose { position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%; background: rgba(74,70,77,.6); color: #fff; border: none; font-size: 16px; cursor: pointer; z-index: 5; }
+.mbox .mimg { aspect-ratio: 1 / 1; object-fit: contain; background: var(--bg); padding: 20px; width: 100%; }
+.mbox .mbd { padding: 18px 20px 22px; }
+.mbox .mcat { font-size: 11px; color: var(--blue-d); font-weight: 800; }
+.mbox .mnm { font-size: 18px; font-weight: 800; color: var(--ink); margin: 3px 0 5px; }
+.mbox .mpr { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 12px; }
+.mbox .mdc { font-size: 13px; color: var(--text); line-height: 1.85; margin-bottom: 12px; }
+.mbox .mft { list-style: none; }
+.mbox .mft li { font-size: 12.5px; color: var(--text); padding: 8px 0; border-top: 1px solid var(--line); display: flex; gap: 8px; line-height: 1.65; }
+.mbox .mft li::before { content: "✓"; color: var(--blue); font-weight: 900; flex-shrink: 0; }
+.mbox .mcta { display: block; text-align: center; margin-top: 16px; background: var(--blue); color: var(--ink); padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 800; }
+
+/* ══════════ PC（768px以上） ══════════ */
+@media (min-width: 768px) {
+  #bg-deco { display: block; }
+  #wrap { box-shadow: 0 0 60px rgba(74,70,77,.2); padding-bottom: 0; }
+  #sticky { max-width: 480px; }
+  #toTop { right: calc(50% - 240px - 62px); bottom: 28px; }
+  .sec { padding: 56px 30px; }
+  .cta-block { padding: 44px 30px; }
+  #contact { padding: 56px 30px 60px; }
+  #fv-text { padding: 30px 30px 38px; }
+  .sec-ttl { font-size: 23px; }
+  .anno-switch { left: 22px; top: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div id="bg-deco">
+  <div class="bg-ttl">SKINIMALIST — AQUA-LESS SKINCARE FOR SALON</div>
+  <div class="bg-ttl2">FOR SALON OWNER — 店販という、もう一つの柱を。</div>
+</div>
+
+<div id="prog"></div>
+<button class="anno-switch" id="annoSw" onclick="toggleAnno()">📐 画像サイズ表示 ON（タップでOFF）</button>
+
+<div id="wrap">
+
+  <header id="hd">
+    <img src="https://fan.liberta.net/skinimalist/img/logo.png" alt="Skinimalist" width="115" height="22">
+    <a href="#contact" class="hd-btn">お問い合わせ</a>
+  </header>
+
+  <!-- ══════════ ① FV：キービジュアルを全面表示 → テキストは下へ ══════════ -->
+  <section id="fv">
+    <div id="fv-img" class="img-slot">
+      <div class="spec" onclick="this.classList.toggle('open')">
+        <span class="badge new">差替予定</span>720×1240px
+        <div class="spec-detail">春のビューティーワールドジャパンで使用したキービジュアル（PNG・文字入り・720×1240px）に差し替え。現在は仮画像です。</div>
+      </div>
+      <img class="fit" src="https://fan.liberta.net/skinimalist/img/top_sp.jpg" alt="Skinimalist キービジュアル">
+    </div>
+    <div id="fv-text">
+      <div class="eyebrow">FOR SALON OWNER</div>
+      <h1>施術の手を止めずに、<br>売上をもう一段。</h1>
+      <div class="big"><span class="num-ct" data-t="330">330</span><small>万円</small></div>
+      <div class="big-sub">取扱サロンの月間店販売上（平均）</div>
+      <a href="#contact" class="btn shine">無料相談・お問い合わせ<span class="sm">所要30分／費用0円</span></a>
+      <p class="fv-note">Aqua-less®処方｜エステサロン専売</p>
+    </div>
+  </section>
+
+  <!-- ══════════ ② KPI ══════════ -->
+  <section id="kpi">
+    <div class="grid">
+      <div class="cell"><div class="n"><span class="num-ct" data-t="15">15</span><u>店舗</u></div><div class="l">1年で拡大した<br>取扱サロン数</div></div>
+      <div class="cell"><div class="n"><span class="num-ct" data-t="89">89</span><u>%</u></div><div class="l">購入者の<br>平均リピート率</div></div>
+      <div class="cell"><div class="n"><span class="num-ct" data-t="330">330</span><u>万円</u></div><div class="l">取扱サロンの<br>月間店販売上</div></div>
+      <div class="cell"><div class="n">6<u>:4</u></div><div class="l">店販 : 施術<br>の売上比率</div></div>
+    </div>
+    <p class="cap">※ 取扱サロンの実績平均値。導入時期・規模により異なります。</p>
+  </section>
+
+  <!-- ══════════ ③ お悩み ══════════ -->
+  <section class="sec gray">
+    <p class="sec-tag reveal">Problem</p>
+    <h2 class="sec-ttl reveal">こんなお悩み、<br>ありませんか？</h2>
+    <div class="sec-bar reveal"></div>
+    <ul class="worry reveal">
+      <li>施術で手一杯。対応人数に限界がある</li>
+      <li>カウンセリングに時間が取れない</li>
+      <li>スタッフ教育に時間とコストがかかる</li>
+      <li>キャンペーン頼みで、売上が読めない</li>
+    </ul>
+    <p class="worry-end reveal">解決の鍵は、<br><mark>「店販の仕組み」</mark>です。</p>
+  </section>
+
+  <!-- ══════════ ④ 売上の天井 ══════════ -->
+  <section class="sec white" id="why">
+    <p class="sec-tag reveal">Why Retail</p>
+    <h2 class="sec-ttl reveal">施術売上には、<br><em>天井があります。</em></h2>
+    <div class="sec-bar reveal"></div>
+    <p class="sec-lead reveal">人を増やさず伸ばせるのは、店販だけ。</p>
+    <div class="bars reveal">
+      <div class="bar-row">
+        <div class="bar-lb"><span>施術売上</span><span>人時で頭打ち</span></div>
+        <div class="bar-tr"><div class="bar-fl cap" data-w="58" style="width:58%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lb"><span>店販売上</span><span>リピートで積み上がる</span></div>
+        <div class="bar-tr"><div class="bar-fl grow" data-w="94" style="width:94%"></div></div>
+      </div>
+    </div>
+    <div class="insight reveal">
+      導入サロンの売上構成<br>
+      <b>店販 : 施術 = 6 : 4</b>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑤ コンセプト ══════════ -->
+  <section class="sec gray">
+    <p class="sec-tag reveal">Aqua-less® Concept</p>
+    <h2 class="sec-ttl reveal">水を使わず、<br>必要成分だけを肌へ。</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="img-slot hero-img reveal">
+      <div class="spec" onclick="this.classList.toggle('open')">
+        <span class="badge new">仮配置</span>720×540px
+        <div class="spec-detail">4製品を並べた集合写真（720×540px）に差し替え予定。現在は現行LPの画像を仮置きしています。</div>
+      </div>
+      <img class="fit" src="https://fan.liberta.net/skinimalist/img/concern_sp.jpg" alt="Skinimalist 製品ラインナップ">
+    </div>
+    <p style="font-size:14px; line-height:1.95; text-align:center;" class="reveal">
+      化粧水の主成分は「水」。<br>
+      Skinimalistは水を使わず、<b style="color:var(--ink)">美容成分100%</b>を届けます。
+    </p>
+    <div class="concept-badges reveal">
+      <span>業界初 Aqua-less®</span>
+      <span>美容成分100%</span>
+      <span>サロン専売</span>
+    </div>
+  </section>
+
+  <!-- ══════════ CTA-A ══════════ -->
+  <section class="cta-block">
+    <p class="ct">まずは、<em>お気軽に</em>ご相談ください。</p>
+    <a href="#contact" class="btn shine">無料相談・お問い合わせ<span class="sm">所要30分／契約の強要なし</span></a>
+  </section>
+
+  <!-- ══════════ ⑦ 3つの理由 ══════════ -->
+  <section class="sec white">
+    <p class="sec-tag reveal">3 Reasons</p>
+    <h2 class="sec-ttl reveal">「良い商品」ではなく<br><em>「売れる商品」</em>です。</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="pts">
+      <div class="pt reveal">
+        <div class="pt-hd"><i>01</i> “売れる”価格</div>
+        <div class="pt-bd">
+          <div class="img-slot ico">
+            <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px; max-width:92%;"><span class="badge" style="font-size:7.5px;">流用</span>288px²
+              <div class="spec-detail">aqualess_point1.png を288×288pxで使用。</div></div>
+            <img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point1.png" alt="売れる価格">
+          </div>
+          <div>
+            <div class="pt-ttl">定価5,000円前後。</div>
+            <div class="pt-tx">買いやすく、リピートされる価格。値引きに頼りません。</div>
+          </div>
+        </div>
+      </div>
+      <div class="pt reveal">
+        <div class="pt-hd"><i>02</i> “売れる”顧客管理</div>
+        <div class="pt-bd">
+          <div class="img-slot ico"><img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point2.png" alt="売れる顧客管理"></div>
+          <div>
+            <div class="pt-ttl">アイテムは4つだけ。</div>
+            <div class="pt-tx">悩み別に迷わず提案。在庫の負担も最小です。</div>
+          </div>
+        </div>
+      </div>
+      <div class="pt reveal">
+        <div class="pt-hd"><i>03</i> “売れる”接客</div>
+        <div class="pt-bd">
+          <div class="img-slot ico"><img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point3.png" alt="売れる接客"></div>
+          <div>
+            <div class="pt-ttl">新人でもできる鉄則カウンセリング。</div>
+            <div class="pt-tx">端的な訴求で、お客様から声がかかります。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑧ 製品 ══════════ -->
+  <section class="sec gray">
+    <p class="sec-tag reveal">Line Up</p>
+    <h2 class="sec-ttl reveal">4アイテムで、<br>肌悩みを全方位に。</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="prods reveal">
+      <div class="prod">
+        <div class="img-slot ph">
+          <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px;"><span class="badge" style="font-size:7.5px;">800px²</span>
+            <div class="spec-detail">4点とも800×800px・正方形で統一。</div></div>
+          <img class="fit" src="https://fan.liberta.net/skinimalist/img/product1.png" alt="エッセンスリッチローション">
+        </div>
+        <div class="in">
+          <div class="cat">水の無いローション</div>
+          <div class="nm">エッセンスリッチローション</div>
+          <div class="pr">¥4,800 <small>(税別)</small></div>
+          <div class="cc">弱みがあれば、この1本</div>
+          <button class="db" onclick="openP(0)">詳細 ＋</button>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product2.png" alt="シラタマアンプル"></div>
+        <div class="in">
+          <div class="cat">ブライトニング美容液</div>
+          <div class="nm">シラタマアンプル</div>
+          <div class="pr">¥6,000 <small>(税別)</small></div>
+          <div class="cc">シミ・くすみ・色むらへ</div>
+          <button class="db" onclick="openP(1)">詳細 ＋</button>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product3.png" alt="ラディアンスピール"></div>
+        <div class="in">
+          <div class="cat">ふき取り不要の角質ケア</div>
+          <div class="nm">ラディアンスピール</div>
+          <div class="pr">¥4,200 <small>(税別)</small></div>
+          <div class="cc">毛穴・ニキビ・ごわつきに</div>
+          <button class="db" onclick="openP(2)">詳細 ＋</button>
+        </div>
+      </div>
+      <div class="prod">
+        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product4.png" alt="グラナアンプル"></div>
+        <div class="in">
+          <div class="cat">エイジングケア美容液</div>
+          <div class="nm">グラナアンプル</div>
+          <div class="pr">¥6,500 <small>(税別)</small></div>
+          <div class="cc">しわ・たるみ毛穴へ</div>
+          <button class="db" onclick="openP(3)">詳細 ＋</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="concerns reveal">
+      <div class="concern">
+        <div class="img-slot cimg">
+          <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px;"><span class="badge" style="font-size:7.5px;">流用</span>720×410
+            <div class="spec-detail">concern1〜4.png をそのまま使用（元の縦横比を維持）。</div></div>
+          <img class="fit" src="https://fan.liberta.net/skinimalist/img/concern1.png" alt="乾燥・小じわ">
+        </div>
+        <div class="cp">乾燥・小じわ</div>
+      </div>
+      <div class="concern"><div class="cimg"><img class="fit" src="https://fan.liberta.net/skinimalist/img/concern2.png" alt="敏感・炎症"></div><div class="cp">敏感・炎症</div></div>
+      <div class="concern"><div class="cimg"><img class="fit" src="https://fan.liberta.net/skinimalist/img/concern3.png" alt="毛穴・トラブル"></div><div class="cp">毛穴・トラブル</div></div>
+      <div class="concern"><div class="cimg"><img class="fit" src="https://fan.liberta.net/skinimalist/img/concern4.png" alt="くすみ"></div><div class="cp">くすみ</div></div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑪ 導入サポート ══════════ -->
+  <section class="sec white">
+    <p class="sec-tag reveal">Support</p>
+    <h2 class="sec-ttl reveal">導入後も、<br>売れるまで伴走します。</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="sup reveal">
+      <div class="sup-item"><div class="no">1</div><div><div class="st">店頭販促ツール一式</div><div class="sx">POP・什器・リーフレットで売場をつくります。</div></div></div>
+      <div class="sup-item"><div class="no">2</div><div><div class="st">鉄則カウンセリングシート</div><div class="sx">台本形式で、誰でも同じ接客ができます。</div></div></div>
+      <div class="sup-item"><div class="no">3</div><div><div class="st">SNS用クリエイティブ</div><div class="sx">Instagram投稿用の素材をご提供します。</div></div></div>
+      <div class="sup-item"><div class="no">4</div><div><div class="st">スタッフ向け導入研修</div><div class="sx">商品知識と販売トークを短時間で習得できます。</div></div></div>
+    </div>
+    <div class="ph-slot reveal">
+      <div class="pt2">📷 販促ツール実物写真</div>
+      <div class="px">720×405px ／ POP・什器・カウンセリングシート</div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑫ 導入サロンの声 ══════════ -->
+  <section class="sec gray">
+    <p class="sec-tag reveal">Voice</p>
+    <h2 class="sec-ttl reveal">導入サロンの声</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="voices reveal">
+      <div class="voice">
+        <div class="vh"><div class="av">200<br>×200</div><div><div class="vn">◯◯サロン様</div><div class="vm">東京都／1名経営</div></div></div>
+        <div class="vt">「導入の決め手と、導入後の変化を3行で。」</div>
+        <div class="vr">店販売上 <b>◯◯万円 → ◯◯万円</b></div>
+      </div>
+      <div class="voice">
+        <div class="vh"><div class="av">200<br>×200</div><div><div class="vn">◯◯サロン様</div><div class="vm">大阪府／スタッフ3名</div></div></div>
+        <div class="vt">「教育面での変化を3行で。」</div>
+        <div class="vr">リピート率 <b>◯◯%</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑬ 流れ ══════════ -->
+  <section class="sec white">
+    <p class="sec-tag reveal">Flow</p>
+    <h2 class="sec-ttl reveal">ご相談から導入まで</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="flow reveal">
+      <div class="flow-step"><div class="ln"></div><div class="no">1</div><div><div class="ft">お問い合わせ</div><div class="fx">フォームから1分。1営業日以内にご返信します。</div></div></div>
+      <div class="flow-step"><div class="ln"></div><div class="no">2</div><div><div class="ft">オンライン無料相談（30分）</div><div class="fx">収支の個別試算と、他サロンの事例をご案内します。</div></div></div>
+      <div class="flow-step"><div class="ln"></div><div class="no">3</div><div><div class="ft">サンプル・条件のご案内</div><div class="fx">製品をお試しいただき、価格条件をご提示します。</div></div></div>
+      <div class="flow-step"><div class="ln"></div><div class="no">4</div><div><div class="ft">ご導入・販促サポート開始</div><div class="fx">販促ツールの納品と、導入研修を行います。</div></div></div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑭ 約束 ══════════ -->
+  <section class="sec gray">
+    <p class="sec-tag reveal">Our Promise</p>
+    <h2 class="sec-ttl reveal">契約の強要は、<br>一切ありません。</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="promise reveal">
+      <div class="px2">無料相談は<b style="color:var(--ink)">情報提供が目的</b>です。<br>他社との比較も、見送りも、そのままお伝えください。</div>
+    </div>
+    <ul class="know reveal">
+      <li>貴サロンの規模での粗利試算</li>
+      <li>同規模サロンの販売事例</li>
+      <li>最低ロット・初期費用・在庫リスク</li>
+    </ul>
+  </section>
+
+  <!-- ══════════ ⑯ FAQ ══════════ -->
+  <section class="sec white">
+    <p class="sec-tag reveal">FAQ</p>
+    <h2 class="sec-ttl reveal">よくあるご質問</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="reveal">
+      <details class="faq"><summary>最低ロットや初期費用はありますか？</summary>
+        <div class="fa">貴サロンの規模に合わせて、無料相談でご案内します。</div></details>
+      <details class="faq"><summary>在庫リスクはありますか？</summary>
+        <div class="fa">アイテムは4つのみ。在庫は最小限です。返品条件は無料相談でご説明します。</div></details>
+      <details class="faq"><summary>スタッフ教育に時間はかかりますか？</summary>
+        <div class="fa">台本形式のカウンセリングシートと導入研修で、短時間で習得できます。</div></details>
+      <details class="faq"><summary>相談したら契約を迫られませんか？</summary>
+        <div class="fa">いいえ。その場でのご契約・お申し込みはありません。</div></details>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑰ 会社 ══════════ -->
+  <section class="sec gray">
+    <div class="img-slot corp-logo reveal">
+      <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px;"><span class="badge" style="font-size:7.5px;">流用</span>600×115
+        <div class="spec-detail">logo.png を600×115pxで使用。</div></div>
+      <img class="fit" src="https://fan.liberta.net/skinimalist/img/logo.png" alt="Skinimalist">
+    </div>
+    <p class="sec-tag reveal">Company</p>
+    <h2 class="sec-ttl reveal">2社の専門性が<br>生んだブランド</h2>
+    <div class="sec-bar reveal"></div>
+    <div class="corp reveal">
+      <div class="corp-box"><div class="cn2">株式会社リベルタ</div><div class="cx">マーケティング・PR・販促設計を担当。</div></div>
+      <div class="corp-box"><div class="cn2">株式会社アフラ</div><div class="cx">コンセプト設計・処方開発・製造を担当するOEMメーカー。</div></div>
+    </div>
+  </section>
+
+  <!-- ══════════ お問い合わせフォーム（最下部・CTAの遷移先） ══════════ -->
+  <section id="contact">
+    <p class="sec-tag">Contact</p>
+    <h2 class="sec-ttl">まずは、話を<br><em>聞いてみませんか。</em></h2>
+    <div class="sec-bar"></div>
+    <p class="sec-lead" style="margin-bottom:20px;">所要30分／費用0円／契約の強要なし</p>
+
+    <div class="form-card">
+      <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)" novalidate>
+        <div class="hp" aria-hidden="true">
+          <label for="website">website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="company">会社名・サロン名<span>必須</span></label>
+          <input class="form-input" type="text" id="company" name="company" placeholder="例：〇〇エステサロン" required aria-required="true">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="name">ご担当者名<span>必須</span></label>
+          <input class="form-input" type="text" id="name" name="name" placeholder="例：山田 花子" required aria-required="true">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">メールアドレス<span>必須</span></label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="example@salon.com" required aria-required="true">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="tel">電話番号</label>
+          <input class="form-input" type="tel" id="tel" name="tel" placeholder="例：03-0000-0000">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="salonUrl">サロンURL</label>
+          <input class="form-input" type="url" id="salonUrl" name="salonUrl" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="type">お問い合わせ種別<span>必須</span></label>
+          <select class="form-select" id="type" name="type" required aria-required="true">
+            <option value="" disabled selected>選択してください</option>
+            <option value="intro">サロン導入のご相談</option>
+            <option value="catalog">サンプル・資料請求</option>
+            <option value="product">業務用製品について</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">ご質問・ご要望</label>
+          <textarea class="form-textarea" id="message" name="message" placeholder="ご自由にご記入ください" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="btn form-submit" aria-label="お問い合わせを送信する">送信する</button>
+      </form>
+
+      <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+        <p>お問い合わせありがとうございます。</p>
+        <small>担当者より3営業日以内にご連絡いたします。</small>
+      </div>
+    </div>
+  </section>
+
+  <footer id="ft">
+    <p>Skinimalist（スキニマリスト）</p>
+    <p style="margin-top:6px;">© Skinimalist by Afura Inc. All rights reserved.</p>
+  </footer>
+</div>
+
+<!-- スクロール時に出るCTA（フォームへ遷移） -->
+<div id="sticky">
+  <a href="#contact" class="btn shine">無料相談・お問い合わせ</a>
+</div>
+
+<button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="トップへ戻る">↑</button>
+
+<!-- 製品モーダル -->
+<div class="ov-m" id="pmodal" onclick="if(event.target===this) closeP()">
+  <div class="mbox">
+    <button class="mclose" onclick="closeP()">×</button>
+    <img class="mimg" id="m-img" alt="">
+    <div class="mbd">
+      <div class="mcat" id="m-cat"></div>
+      <div class="mnm" id="m-nm"></div>
+      <div class="mpr" id="m-pr"></div>
+      <p class="mdc" id="m-dc"></p>
+      <ul class="mft" id="m-ft"></ul>
+      <a href="#contact" class="mcta" onclick="closeP()">この商品について相談する →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── 画像サイズ表示のON/OFF ── */
+function toggleAnno() {
+  var off = document.body.classList.toggle('no-anno');
+  var b = document.getElementById('annoSw');
+  b.classList.toggle('off', off);
+  b.textContent = off ? '📐 画像サイズ表示 OFF（タップでON）' : '📐 画像サイズ表示 ON（タップでOFF）';
+}
+
+/* ── 製品データ ── */
+var PRODUCTS = [
+  { img:'https://fan.liberta.net/skinimalist/img/product1.png', cat:'水の無いローション', nm:'エッセンスリッチローション', pr:'¥4,800（税別）',
+    dc:'水を使わない、オールインワンのとろみ美容液ローション。', ft:['Aqua-less®処方・美容成分100%','敏感肌にも使える人気No.1'] },
+  { img:'https://fan.liberta.net/skinimalist/img/product2.png', cat:'ブライトニング美容液', nm:'シラタマアンプル', pr:'¥6,000（税別）',
+    dc:'シミ・くすみ・色むらに、集中アプローチ。', ft:['使うほど実感が積み上がる','単品からライン提案へつなげやすい'] },
+  { img:'https://fan.liberta.net/skinimalist/img/product3.png', cat:'ふき取り不要の角質ケア', nm:'ラディアンスピール', pr:'¥4,200（税別）',
+    dc:'毛穴・ニキビ・ごわつきを、やさしくケア。', ft:['ふき取り不要で肌に負担が少ない','入門アイテムとして提案しやすい'] },
+  { img:'https://fan.liberta.net/skinimalist/img/product4.png', cat:'エイジングケア美容液', nm:'グラナアンプル', pr:'¥6,500（税別）',
+    dc:'しわ・たるみ・たるみ毛穴へ。次世代型レチノール配合。', ft:['次世代型レチノール配合','客単価を引き上げるアップセル商材'] }
+];
+function openP(i) {
+  var p = PRODUCTS[i];
+  document.getElementById('m-img').src = p.img;
+  document.getElementById('m-cat').textContent = p.cat;
+  document.getElementById('m-nm').textContent  = p.nm;
+  document.getElementById('m-pr').textContent  = p.pr;
+  document.getElementById('m-dc').textContent  = p.dc;
+  document.getElementById('m-ft').innerHTML = p.ft.map(function(f){ return '<li>' + f + '</li>'; }).join('');
+  document.getElementById('pmodal').classList.add('show');
+}
+function closeP() { document.getElementById('pmodal').classList.remove('show'); }
+
+/* ── フォーム送信（latinou LPと同じ挙動：必須チェック→完了表示） ── */
+function handleSubmit(e) {
+  e.preventDefault();
+  var form = document.getElementById('contactForm');
+  var success = document.getElementById('formSuccess');
+  if (form.website && form.website.value) return;           // ボット対策（ハニーポット）
+  var valid = true;
+  form.querySelectorAll('[required]').forEach(function(field) {
+    var bad = !field.value.trim();
+    if (field.type === 'email' && !bad && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) bad = true;
+    if (bad) {
+      valid = false;
+      field.style.borderColor = '#c0392b';
+      field.addEventListener('input', function() { field.style.borderColor = ''; }, { once: true });
+    }
+  });
+  if (!valid) return;
+  form.style.display = 'none';
+  success.style.display = 'block';
+}
+
+/* ── スクロール演出（スクロール監視1本。JSが止まっても本文は表示される） ── */
+var canAnim = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var revealEls = [], animBlocks = [];
+if (canAnim) {
+  document.body.classList.add('js-anim');
+  revealEls  = [].slice.call(document.querySelectorAll('.reveal'));
+  animBlocks = [].slice.call(document.querySelectorAll('#fv-text, #kpi, #why'));
+}
+function revealPass() {
+  var vh = window.innerHeight;
+  if (revealEls.length) {
+    revealEls = revealEls.filter(function(el) {
+      if (el.getBoundingClientRect().top < vh * 0.92) { el.classList.add('on'); return false; }
+      return true;
+    });
+  }
+  if (animBlocks.length) {
+    animBlocks = animBlocks.filter(function(el) {
+      var r = el.getBoundingClientRect();
+      var visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+      if (visible > 0 && visible > Math.min(r.height, vh) * 0.3) {
+        el.querySelectorAll('.num-ct').forEach(countUp);
+        el.querySelectorAll('.bar-fl').forEach(function(b) { if (b.dataset.w) b.classList.add('growing'); });
+        return false;
+      }
+      return true;
+    });
+  }
+}
+function countUp(el) {
+  var target = +el.dataset.t;
+  if (!isFinite(target)) return;
+  var dur = 900, t0 = null;
+  requestAnimationFrame(function frame(ts) {
+    if (t0 === null) t0 = ts;
+    var p = Math.min((ts - t0) / dur, 1);
+    el.textContent = p < 1 ? Math.floor(target * p) : target;
+    if (p < 1) requestAnimationFrame(frame);
+  });
+}
+
+/* ── スクロール時のCTA表示（フォーム表示中は隠す） ── */
+var bar = document.getElementById('sticky');
+var toTop = document.getElementById('toTop');
+var prog = document.getElementById('prog');
+var contact = document.getElementById('contact');
+function sync() {
+  var vh = window.innerHeight, y = window.scrollY;
+  var cr = contact.getBoundingClientRect();
+  var formOnScreen = cr.top < vh * 0.9;
+  bar.classList.toggle('show', y > vh * 0.55 && !formOnScreen);
+  toTop.classList.toggle('show', y > vh * 1.5);
+  var max = document.documentElement.scrollHeight - vh;
+  prog.style.width = (max > 0 ? Math.min(y / max * 100, 100) : 0) + '%';
+  revealPass();
+}
+var ticking = false;
+window.addEventListener('scroll', function() {
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(function() { sync(); ticking = false; });
+}, { passive: true });
+window.addEventListener('resize', sync, { passive: true });
+window.addEventListener('load', sync);
+sync();
+window.addEventListener('error', function() { document.body.classList.remove('js-anim'); });
+
+/* ── ページ内アンカーのスムーススクロール ── */
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var t = document.querySelector(a.getAttribute('href'));
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>
