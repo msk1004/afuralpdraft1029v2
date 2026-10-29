@@ -33,7 +33,7 @@ body {
   line-break: strict;
 }
 h1, h2, h3, .ct, .pt-ttl { text-wrap: balance; }
-p, .pt-tx, .sx, .fa { text-wrap: pretty; }
+p, .pt-tx, .sx, .fa, .fx, .cx, .px2 { text-wrap: balance; }
 .nw { white-space: nowrap; }
 img { max-width: 100%; height: auto; display: block; }
 a { text-decoration: none; color: inherit; }
@@ -184,16 +184,13 @@ body.no-diff .diff { display: none; }
 .worry-end mark { background: linear-gradient(transparent 60%, var(--blue-lt) 60%); }
 
 /* ══════════ ④ 売上の天井 ══════════ */
-.bars { margin: 22px 0 18px; }
-.bar-row { margin-bottom: 17px; }
-.bar-lb { font-size: 12.5px; font-weight: 700; color: var(--ink); margin-bottom: 6px; display: flex; justify-content: space-between; }
-.bar-lb span:last-child { color: var(--blue-d); font-weight: 800; }
-.bar-tr { background: var(--bg); border-radius: 4px; height: 26px; overflow: hidden; }
-.bar-fl { height: 100%; border-radius: 4px; }
-@keyframes barGrow { from { width: 0; } }
-body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1); }
-.bar-fl.cap  { background: #b9b6bc; }
-.bar-fl.grow { background: var(--blue); }
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 22px 0 18px; }
+.cmp-card { border-radius: 10px; padding: 16px 10px 16px; text-align: center; border: 1px solid var(--line); background: var(--bg); }
+.cmp-card.grow { background: var(--blue-lt); border: 2px solid var(--blue); }
+.cmp-tag { display: inline-block; font-size: 11px; font-weight: 800; padding: 2px 10px; border-radius: 10px; background: #fff; color: var(--text); border: 1px solid var(--line); margin-bottom: 8px; }
+.cmp-card.grow .cmp-tag { background: var(--blue); color: var(--ink); border-color: var(--blue); }
+.cmp-ttl { font-size: 18px; font-weight: 900; color: var(--ink); margin-bottom: 6px; }
+.cmp-card p { font-size: 12.5px; line-height: 1.75; color: var(--text); }
 .insight {
   background: var(--white); border: 2px solid var(--blue); border-radius: 8px;
   padding: 17px; font-size: 14px; line-height: 1.9; color: var(--ink); text-align: center; font-weight: 700;
@@ -223,10 +220,10 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
 /* ══════════ ⑧ 製品 ══════════ */
 .prods { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
 .prod { background: var(--white); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-.prod .ph { background: var(--bg); aspect-ratio: 1 / 1; padding: 10px; }
+.prod .ph { background: var(--bg); aspect-ratio: 1 / 1; padding: 12px; }
 .prod .in { padding: 10px 11px 8px; flex: 1; display: flex; flex-direction: column; }
 .prod .cat { font-size: 10px; color: var(--blue-d); font-weight: 700; }
-.prod .nm { font-size: 12px; font-weight: 800; color: var(--ink); line-height: 1.4; margin: 3px 0 4px; }
+.prod .nm { font-size: 12px; font-weight: 800; color: var(--ink); line-height: 1.4; margin: 3px 0 4px; min-height: 2.8em; }
 .prod .pr { font-size: 14px; font-weight: 800; color: var(--ink); }
 .prod .pr small { font-size: 9.5px; color: var(--text); font-weight: 400; }
 .prod .cc { font-size: 10.5px; color: var(--text); margin: 4px 0 8px; line-height: 1.55; }
@@ -393,7 +390,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       <li><b style="display:inline;color:var(--ink)">色：</b>紺×ゴールド → <b style="display:inline">#9dbde4（アテンション）／#f5f5f5（背景）／#6C676E（文字）</b>の3色基調に変更</li>
       <li><b style="display:inline;color:var(--ink)">テキスト：</b>各セクションを言い切り・端的な表現に短縮。補足説明・タグ・「要確認」注記は削除</li>
       <li><b style="display:inline;color:var(--ink)">CTA：</b>「予約」「LINE」の2動線 → 最下部のお問い合わせフォームへの遷移に一本化</li>
-      <li><b style="display:inline;color:var(--ink)">画像：</b>使用画像14点・依頼サイズ（720×1240／720×540／800²／758×432／288²／600×115）は変更なし。枠いっぱいに切り取る表示（cover）を、全体が見える表示（contain）に変更</li>
+      <li><b style="display:inline;color:var(--ink)">画像：</b>使用画像14点・依頼サイズ（720×1240／720×540／758×432／288²／600×115）は変更なし。製品画像は追加依頼なし。枠いっぱいに切り取る表示（cover）を、全体が見える表示（contain）に変更</li>
       <li><b style="display:inline;color:var(--ink)">構成：</b>セクションの順序は前回と同じ。削除＝収支シミュレーション／中間・最終CTA（紺背景）／PC用サイドCTA。追加＝最下部のお問い合わせフォーム</li>
     </ul>
   </div>
@@ -426,7 +423,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       <div class="cell"><div class="n"><span class="num-ct" data-t="15">15</span><u>店舗</u></div><div class="l">1年で拡大した<br>取扱サロン数</div></div>
       <div class="cell"><div class="n"><span class="num-ct" data-t="89">89</span><u>%</u></div><div class="l">購入者の<br>平均リピート率</div></div>
       <div class="cell"><div class="n"><span class="num-ct" data-t="330">330</span><u>万円</u></div><div class="l">取扱サロンの<br>月間店販売上</div></div>
-      <div class="cell"><div class="n">6<u>:4</u></div><div class="l">店販 : 施術<br>の売上比率</div></div>
+      <div class="cell"><div class="n">6<u>:4</u></div><div class="l">店販と施術の<br>売上比率</div></div>
     </div>
     <p class="cap">※ 取扱サロンの実績平均値。導入時期・規模により異なります。</p>
   </section>
@@ -452,15 +449,17 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <h2 class="sec-ttl reveal">施術売上には、<br><em>天井があります。</em></h2>
     <div class="sec-bar reveal"></div>
     <p class="sec-lead reveal">人を増やさず伸ばせるのは、店販だけ。</p>
-    <div class="diff "><b>▶ 変更点：売上の天井</b><span class="o">前回</span>リード文2行＋各バーに補足文<br><span class="n">今回</span>リード文1行。バーの補足文を削除。グラフの数値は変更なし</div>
-<div class="bars reveal">
-      <div class="bar-row">
-        <div class="bar-lb"><span>施術売上</span><span>人時で頭打ち</span></div>
-        <div class="bar-tr"><div class="bar-fl cap" data-w="58" style="width:58%"></div></div>
+    <div class="diff "><b>▶ 変更点：売上の天井</b><span class="o">前回</span>リード文2行。「施術売上」と「店販売上」を横棒グラフで比較（棒の長さの意味が分かりにくい）<br><span class="n">今回</span>リード文1行。棒グラフを削除し、「上限あり／積み上がる」の2つの比較カードに変更。6:4の実績表示は変更なし</div>
+    <div class="cmp reveal">
+      <div class="cmp-card limit">
+        <div class="cmp-tag">上限あり</div>
+        <div class="cmp-ttl">施術売上</div>
+        <p>スタッフ数×<br>稼働時間で決まる</p>
       </div>
-      <div class="bar-row">
-        <div class="bar-lb"><span>店販売上</span><span>リピートで積み上がる</span></div>
-        <div class="bar-tr"><div class="bar-fl grow" data-w="94" style="width:94%"></div></div>
+      <div class="cmp-card grow">
+        <div class="cmp-tag">積み上がる</div>
+        <div class="cmp-ttl">店販売上</div>
+        <p>リピートで<br>人手をかけず伸びる</p>
       </div>
     </div>
     <div class="insight reveal">
@@ -484,7 +483,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <div class="diff "><b>▶ 変更点：コンセプト</b><span class="o">前回</span>説明文2段落（約110字）。画像は現行LPの縦長画像をそのまま配置<br><span class="n">今回</span>説明文2行に短縮。画像は720×540pxの枠に全体表示（仮配置のまま・差替予定）</div>
 <p style="font-size:14px; line-height:1.95; text-align:center;" class="reveal">
       化粧水の主成分は「水」。<br>
-      Skinimalistは水を使わず、<b style="color:var(--ink)">美容成分100%</b>を届けます。
+      Skinimalistは水を使わず、<br>
+      <b style="color:var(--ink)"><span class="nw">美容成分100%</span></b>を届けます。
     </p>
     <div class="concept-badges reveal">
       <span>業界初 Aqua-less®</span>
@@ -517,7 +517,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
           </div>
           <div>
             <div class="pt-ttl">定価5,000円前後。</div>
-            <div class="pt-tx">買いやすく、リピートされる価格。値引きに頼りません。</div>
+            <div class="pt-tx">買いやすく、リピートされる価格。<br>値引きに頼りません。</div>
           </div>
         </div>
       </div>
@@ -527,7 +527,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
           <div class="img-slot ico"><img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point2.png" alt="売れる顧客管理"></div>
           <div>
             <div class="pt-ttl">アイテムは4つだけ。</div>
-            <div class="pt-tx">悩み別に迷わず提案。在庫の負担も最小です。</div>
+            <div class="pt-tx">悩み別に迷わず提案。<br>在庫の負担も最小です。</div>
           </div>
         </div>
       </div>
@@ -537,7 +537,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
           <div class="img-slot ico"><img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point3.png" alt="売れる接客"></div>
           <div>
             <div class="pt-ttl">新人でもできる鉄則カウンセリング。</div>
-            <div class="pt-tx">端的な訴求で、お客様から声がかかります。</div>
+            <div class="pt-tx">端的な訴求で、<br>お客様から声がかかります。</div>
           </div>
         </div>
       </div>
@@ -551,14 +551,10 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <div class="sec-bar reveal"></div>
     <div class="prods reveal">
       <div class="prod">
-        <div class="img-slot ph">
-          <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px;"><span class="badge" style="font-size:7.5px;">800px²</span>
-            <div class="spec-detail">4点とも800×800px・正方形で統一。</div></div>
-          <img class="fit" src="https://fan.liberta.net/skinimalist/img/product1.png" alt="エッセンスリッチローション">
-        </div>
+        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product1.png" alt="エッセンスリッチローション"></div>
         <div class="in">
           <div class="cat">水の無いローション</div>
-          <div class="nm">エッセンスリッチローション</div>
+          <div class="nm">エッセンスリッチ<br>ローション</div>
           <div class="pr">¥4,800 <small>(税別)</small></div>
           <div class="cc">弱みがあれば、この1本</div>
           <button class="db" onclick="openP(0)">詳細 ＋</button>
@@ -596,7 +592,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       </div>
     </div>
 
-    <div class="diff "><b>▶ 変更点：製品ラインナップ</b><span class="o">前回</span>製品下の「在庫は最小限」の補足帯あり。製品画像は縦横比の異なるまま<br><span class="n">今回</span>補足帯を削除。製品画像は800²の正方形枠に全体表示。悩み別画像4点（758×432）は変更なし</div>
+    <div class="diff "><b>▶ 変更点：製品ラインナップ</b><span class="o">前回</span>製品下の「在庫は最小限」の補足帯あり。製品画像は縦横比がバラバラのまま並ぶ<br><span class="n">今回</span>補足帯を削除。製品画像は4点とも同じ大きさの枠（背景は薄いグレー）に統一して表示。画像の追加・再書き出しは不要。悩み別画像4点（758×432）は変更なし</div>
 <div class="concerns reveal">
       <div class="concern">
         <div class="img-slot cimg">
@@ -659,8 +655,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <div class="diff "><b>▶ 変更点：導入までの流れ</b><span class="o">前回</span>4ステップ。各ステップに説明2行と「◯日 ※要確認」タグ<br><span class="n">今回</span>4ステップは同じ。説明を1行に短縮し、「要確認」タグを削除</div>
 <div class="flow reveal">
       <div class="flow-step"><div class="ln"></div><div class="no">1</div><div><div class="ft">お問い合わせ</div><div class="fx">フォームから1分。1営業日以内にご返信します。</div></div></div>
-      <div class="flow-step"><div class="ln"></div><div class="no">2</div><div><div class="ft">オンライン無料相談（30分）</div><div class="fx">収支の個別試算と、他サロンの事例をご案内します。</div></div></div>
-      <div class="flow-step"><div class="ln"></div><div class="no">3</div><div><div class="ft">サンプル・条件のご案内</div><div class="fx">製品をお試しいただき、価格条件をご提示します。</div></div></div>
+      <div class="flow-step"><div class="ln"></div><div class="no">2</div><div><div class="ft">オンライン無料相談（30分）</div><div class="fx">収支の個別試算と、<br>他サロンの事例をご案内します。</div></div></div>
+      <div class="flow-step"><div class="ln"></div><div class="no">3</div><div><div class="ft">サンプル・条件のご案内</div><div class="fx">製品をお試しいただき、<br>価格条件をご提示します。</div></div></div>
       <div class="flow-step"><div class="ln"></div><div class="no">4</div><div><div class="ft">ご導入・販促サポート開始</div><div class="fx">販促ツールの納品と、導入研修を行います。</div></div></div>
     </div>
   </section>
@@ -672,7 +668,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <div class="sec-bar reveal"></div>
     <div class="diff "><b>▶ 変更点：約束（契約の強要なし）</b><span class="o">前回</span>説明3行＋「30分の相談でわかること」4項目<br><span class="n">今回</span>説明2行＋3項目に短縮</div>
 <div class="promise reveal">
-      <div class="px2">無料相談は<b style="color:var(--ink)">情報提供が目的</b>です。<br>他社との比較も、見送りも、そのままお伝えください。</div>
+      <div class="px2">無料相談は<b style="color:var(--ink)">情報提供が目的</b>です。<br>比較も見送りも、そのままお伝えください。</div>
     </div>
     <ul class="know reveal">
       <li>貴サロンの規模での粗利試算</li>
@@ -695,7 +691,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       <details class="faq"><summary>スタッフ教育に時間はかかりますか？</summary>
         <div class="fa">台本形式のカウンセリングシートと導入研修で、短時間で習得できます。</div></details>
       <details class="faq"><summary>相談したら契約を迫られませんか？</summary>
-        <div class="fa">いいえ。その場でのご契約・お申し込みはありません。</div></details>
+        <div class="fa">いいえ。その場でのご契約や<br>お申し込みはありません。</div></details>
     </div>
   </section>
 
@@ -712,7 +708,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <div class="diff "><b>▶ 変更点：会社概要</b><span class="o">前回</span>各社の説明2行＋注釈ボックス<br><span class="n">今回</span>説明1行に短縮し、注釈ボックスを削除。ロゴは600×115のまま</div>
 <div class="corp reveal">
       <div class="corp-box"><div class="cn2">株式会社リベルタ</div><div class="cx">マーケティング・PR・販促設計を担当。</div></div>
-      <div class="corp-box"><div class="cn2">株式会社アフラ</div><div class="cx">コンセプト設計・処方開発・製造を担当するOEMメーカー。</div></div>
+      <div class="corp-box"><div class="cn2">株式会社アフラ</div><div class="cx">コンセプト設計・処方開発・<br>製造を担当するOEMメーカー。</div></div>
     </div>
   </section>
 
@@ -893,7 +889,7 @@ function revealPass() {
       var visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
       if (visible > 0 && visible > Math.min(r.height, vh) * 0.3) {
         el.querySelectorAll('.num-ct').forEach(countUp);
-        el.querySelectorAll('.bar-fl').forEach(function(b) { if (b.dataset.w) b.classList.add('growing'); });
+        
         return false;
       }
       return true;
