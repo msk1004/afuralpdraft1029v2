@@ -108,6 +108,17 @@ body.js-anim .reveal.on { opacity: 1; transform: none; transition: opacity .7s e
 .img-slot::after { content: ""; position: absolute; inset: 0; z-index: 10; pointer-events: none; border: 2px dashed rgba(157,189,228,.9); }
 body.no-anno .img-slot::after, body.no-anno .img-slot .spec { display: none; }
 
+/* ══════════ 注釈：前回LP（8/14版）との差分 ══════════ */
+.diff { background: var(--blue-lt); border: 1.5px dashed var(--blue); border-radius: 8px; padding: 10px 12px; margin: 14px 0; font-size: 11px; line-height: 1.7; color: var(--ink); text-align: left; }
+.diff b { display: block; font-size: 11.5px; color: var(--blue-d); margin-bottom: 3px; }
+.diff .o, .diff .n { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 0 6px; border-radius: 2px; margin-right: 6px; color: #fff; background: #8e8a91; }
+.diff .n { background: var(--blue-d); }
+.diff.top { margin: 0; border-radius: 0; border-left: 0; border-right: 0; }
+.diff ul { margin: 4px 0 0 16px; }
+body.no-diff .diff { display: none; }
+.diff-switch { top: 96px; }
+@media (min-width: 768px) { .diff-switch { top: 50px; } }
+
 /* 画像枠：元画像の縦横比を保ち、全体を見せる（トリミング・歪みなし） */
 .fit { width: 100%; height: 100%; object-fit: contain; }
 
@@ -369,6 +380,7 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
 
 <div id="prog"></div>
 <button class="anno-switch" id="annoSw" onclick="toggleAnno()">📐 画像サイズ表示 ON（タップでOFF）</button>
+<button class="anno-switch diff-switch" id="diffSw" onclick="toggleDiff()">📝 前回との変更点 ON（タップでOFF）</button>
 
 <div id="wrap">
 
@@ -376,6 +388,15 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <img src="https://fan.liberta.net/skinimalist/img/logo.png" alt="Skinimalist" width="115" height="22">
     <a href="#contact" class="hd-btn">お問い合わせ</a>
   </header>
+  <div class="diff top"><b>▶ 全体の変更点（前回：LP_260814 SP版 → 今回）</b>
+    <ul>
+      <li><b style="display:inline;color:var(--ink)">色：</b>紺×ゴールド → <b style="display:inline">#9dbde4（アテンション）／#f5f5f5（背景）／#6C676E（文字）</b>の3色基調に変更</li>
+      <li><b style="display:inline;color:var(--ink)">テキスト：</b>各セクションを言い切り・端的な表現に短縮。補足説明・タグ・「要確認」注記は削除</li>
+      <li><b style="display:inline;color:var(--ink)">CTA：</b>「予約」「LINE」の2動線 → 最下部のお問い合わせフォームへの遷移に一本化</li>
+      <li><b style="display:inline;color:var(--ink)">画像：</b>使用画像14点・依頼サイズ（720×1240／720×540／800²／758×432／288²／600×115）は変更なし。枠いっぱいに切り取る表示（cover）を、全体が見える表示（contain）に変更</li>
+      <li><b style="display:inline;color:var(--ink)">構成：</b>セクションの順序は前回と同じ。削除＝収支シミュレーション／中間・最終CTA（紺背景）／PC用サイドCTA。追加＝最下部のお問い合わせフォーム</li>
+    </ul>
+  </div>
 
   <!-- ══════════ ① FV：キービジュアルを全面表示 → テキストは下へ ══════════ -->
   <section id="fv">
@@ -386,7 +407,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       </div>
       <img class="fit" src="https://fan.liberta.net/skinimalist/img/top_sp.jpg" alt="Skinimalist キービジュアル">
     </div>
-    <div id="fv-text">
+    <div class="diff "><b>▶ 変更点：トップ（FV）</b><span class="o">前回</span>背景画像の上にコピー・ボタンを重ねて表示。ボタンは「オンライン無料相談」と「LINE資料請求」の2つ<br><span class="n">今回</span>キービジュアルを全面表示し、テキスト・ボタンは画像の下に配置。ボタンは1つ（フォームへ遷移）。画像は720×1240pxのまま</div>
+<div id="fv-text">
       <div class="eyebrow">FOR SALON OWNER</div>
       <h1>施術の手を止めずに、<br>売上をもう一段。</h1>
       <div class="big"><span class="num-ct" data-t="330">330</span><small>万円</small></div>
@@ -398,6 +420,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
 
   <!-- ══════════ ② KPI ══════════ -->
   <section id="kpi">
+    <div class="diff "><b>▶ 変更点：KPI</b><span class="o">前回</span>紺背景・ゴールドの数字<br><span class="n">今回</span>薄いグレー背景・ブルー系の数字。注釈文を短縮（数値は変更なし）</div>
+
     <div class="grid">
       <div class="cell"><div class="n"><span class="num-ct" data-t="15">15</span><u>店舗</u></div><div class="l">1年で拡大した<br>取扱サロン数</div></div>
       <div class="cell"><div class="n"><span class="num-ct" data-t="89">89</span><u>%</u></div><div class="l">購入者の<br>平均リピート率</div></div>
@@ -412,7 +436,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <p class="sec-tag reveal">Problem</p>
     <h2 class="sec-ttl reveal">こんなお悩み、<br>ありませんか？</h2>
     <div class="sec-bar reveal"></div>
-    <ul class="worry reveal">
+    <div class="diff "><b>▶ 変更点：お悩み</b><span class="o">前回</span>肌色背景・赤のチェック。文言が長め（例「施術の習得や、スタッフ教育に時間とコストがかかる」）<br><span class="n">今回</span>薄いグレー背景・ブルーのチェック。4項目とも1行で言い切る表現に短縮</div>
+<ul class="worry reveal">
       <li>施術で手一杯。対応人数に限界がある</li>
       <li>カウンセリングに時間が取れない</li>
       <li>スタッフ教育に時間とコストがかかる</li>
@@ -427,7 +452,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <h2 class="sec-ttl reveal">施術売上には、<br><em>天井があります。</em></h2>
     <div class="sec-bar reveal"></div>
     <p class="sec-lead reveal">人を増やさず伸ばせるのは、店販だけ。</p>
-    <div class="bars reveal">
+    <div class="diff "><b>▶ 変更点：売上の天井</b><span class="o">前回</span>リード文2行＋各バーに補足文<br><span class="n">今回</span>リード文1行。バーの補足文を削除。グラフの数値は変更なし</div>
+<div class="bars reveal">
       <div class="bar-row">
         <div class="bar-lb"><span>施術売上</span><span>人時で頭打ち</span></div>
         <div class="bar-tr"><div class="bar-fl cap" data-w="58" style="width:58%"></div></div>
@@ -455,7 +481,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       </div>
       <img class="fit" src="https://fan.liberta.net/skinimalist/img/concern_sp.jpg" alt="Skinimalist 製品ラインナップ">
     </div>
-    <p style="font-size:14px; line-height:1.95; text-align:center;" class="reveal">
+    <div class="diff "><b>▶ 変更点：コンセプト</b><span class="o">前回</span>説明文2段落（約110字）。画像は現行LPの縦長画像をそのまま配置<br><span class="n">今回</span>説明文2行に短縮。画像は720×540pxの枠に全体表示（仮配置のまま・差替予定）</div>
+<p style="font-size:14px; line-height:1.95; text-align:center;" class="reveal">
       化粧水の主成分は「水」。<br>
       Skinimalistは水を使わず、<b style="color:var(--ink)">美容成分100%</b>を届けます。
     </p>
@@ -468,7 +495,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
 
   <!-- ══════════ CTA-A ══════════ -->
   <section class="cta-block">
-    <p class="ct">まずは、<em>お気軽に</em>ご相談ください。</p>
+    <div class="diff "><b>▶ 変更点：中間CTA（旧CTA-A）</b><span class="o">前回</span>「LINEで資料を受け取る」「オンライン無料相談を予約する」の2ボタン<br><span class="n">今回</span>ボタン1つ（フォームへ遷移）。画面下の追従バーも「LINE＋相談」の2ボタン → 1ボタンに。PC用の右サイドCTAカードは廃止</div>
+<p class="ct">まずは、<em>お気軽に</em>ご相談ください。</p>
     <a href="#contact" class="btn shine">無料相談・お問い合わせ<span class="sm">所要30分／契約の強要なし</span></a>
   </section>
 
@@ -477,7 +505,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <p class="sec-tag reveal">3 Reasons</p>
     <h2 class="sec-ttl reveal">「良い商品」ではなく<br><em>「売れる商品」</em>です。</h2>
     <div class="sec-bar reveal"></div>
-    <div class="pts">
+    <div class="diff "><b>▶ 変更点：3つの理由</b><span class="o">前回</span>見出し＋説明文3行＋タグ2つ<br><span class="n">今回</span>見出し＋説明1文。タグは削除。アイコン画像は288²のまま</div>
+<div class="pts">
       <div class="pt reveal">
         <div class="pt-hd"><i>01</i> “売れる”価格</div>
         <div class="pt-bd">
@@ -567,7 +596,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       </div>
     </div>
 
-    <div class="concerns reveal">
+    <div class="diff "><b>▶ 変更点：製品ラインナップ</b><span class="o">前回</span>製品下の「在庫は最小限」の補足帯あり。製品画像は縦横比の異なるまま<br><span class="n">今回</span>補足帯を削除。製品画像は800²の正方形枠に全体表示。悩み別画像4点（758×432）は変更なし</div>
+<div class="concerns reveal">
       <div class="concern">
         <div class="img-slot cimg">
           <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px;"><span class="badge" style="font-size:7.5px;">流用</span>720×410
@@ -582,7 +612,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     </div>
   </section>
 
-  <!-- ══════════ ⑪ 導入サポート ══════════ -->
+  <div class="diff "><b>▶ 変更点：削除したセクション</b><span class="o">前回</span>収支シミュレーション（月30名想定の店販売上・粗利）と、紺背景のCTA（旧CTA-B）<br><span class="n">今回</span>卸値・掛率が未確定で「要確認」表記が残っていたため削除。条件確定後に復活可能</div>
+<!-- ══════════ ⑪ 導入サポート ══════════ -->
   <section class="sec white">
     <p class="sec-tag reveal">Support</p>
     <h2 class="sec-ttl reveal">導入後も、<br>売れるまで伴走します。</h2>
@@ -593,7 +624,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
       <div class="sup-item"><div class="no">3</div><div><div class="st">SNS用クリエイティブ</div><div class="sx">Instagram投稿用の素材をご提供します。</div></div></div>
       <div class="sup-item"><div class="no">4</div><div><div class="st">スタッフ向け導入研修</div><div class="sx">商品知識と販売トークを短時間で習得できます。</div></div></div>
     </div>
-    <div class="ph-slot reveal">
+    <div class="diff "><b>▶ 変更点：導入サポート</b><span class="o">前回</span>各項目に2行の説明。紫の注釈ボックス（新規提案の理由）あり<br><span class="n">今回</span>説明を1行に短縮し、注釈ボックスを削除。販促ツール実物写真の枠（720×405）は維持</div>
+<div class="ph-slot reveal">
       <div class="pt2">📷 販促ツール実物写真</div>
       <div class="px">720×405px ／ POP・什器・カウンセリングシート</div>
     </div>
@@ -604,7 +636,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <p class="sec-tag reveal">Voice</p>
     <h2 class="sec-ttl reveal">導入サロンの声</h2>
     <div class="sec-bar reveal"></div>
-    <div class="voices reveal">
+    <div class="diff "><b>▶ 変更点：導入サロンの声</b><span class="o">前回</span>構成は同じ。注釈ボックスあり<br><span class="n">今回</span>注釈を削除。サロン名・数字は引き続き◯◯の仮置き（掲載許諾後に反映）。写真枠は200×200</div>
+<div class="voices reveal">
       <div class="voice">
         <div class="vh"><div class="av">200<br>×200</div><div><div class="vn">◯◯サロン様</div><div class="vm">東京都／1名経営</div></div></div>
         <div class="vt">「導入の決め手と、導入後の変化を3行で。」</div>
@@ -623,7 +656,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <p class="sec-tag reveal">Flow</p>
     <h2 class="sec-ttl reveal">ご相談から導入まで</h2>
     <div class="sec-bar reveal"></div>
-    <div class="flow reveal">
+    <div class="diff "><b>▶ 変更点：導入までの流れ</b><span class="o">前回</span>4ステップ。各ステップに説明2行と「◯日 ※要確認」タグ<br><span class="n">今回</span>4ステップは同じ。説明を1行に短縮し、「要確認」タグを削除</div>
+<div class="flow reveal">
       <div class="flow-step"><div class="ln"></div><div class="no">1</div><div><div class="ft">お問い合わせ</div><div class="fx">フォームから1分。1営業日以内にご返信します。</div></div></div>
       <div class="flow-step"><div class="ln"></div><div class="no">2</div><div><div class="ft">オンライン無料相談（30分）</div><div class="fx">収支の個別試算と、他サロンの事例をご案内します。</div></div></div>
       <div class="flow-step"><div class="ln"></div><div class="no">3</div><div><div class="ft">サンプル・条件のご案内</div><div class="fx">製品をお試しいただき、価格条件をご提示します。</div></div></div>
@@ -636,7 +670,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <p class="sec-tag reveal">Our Promise</p>
     <h2 class="sec-ttl reveal">契約の強要は、<br>一切ありません。</h2>
     <div class="sec-bar reveal"></div>
-    <div class="promise reveal">
+    <div class="diff "><b>▶ 変更点：約束（契約の強要なし）</b><span class="o">前回</span>説明3行＋「30分の相談でわかること」4項目<br><span class="n">今回</span>説明2行＋3項目に短縮</div>
+<div class="promise reveal">
       <div class="px2">無料相談は<b style="color:var(--ink)">情報提供が目的</b>です。<br>他社との比較も、見送りも、そのままお伝えください。</div>
     </div>
     <ul class="know reveal">
@@ -652,7 +687,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <h2 class="sec-ttl reveal">よくあるご質問</h2>
     <div class="sec-bar reveal"></div>
     <div class="reveal">
-      <details class="faq"><summary>最低ロットや初期費用はありますか？</summary>
+      <div class="diff "><b>▶ 変更点：FAQ</b><span class="o">前回</span>6問（うち4問は回答が「要確認」）<br><span class="n">今回</span>4問に整理。回答は無料相談でご案内する形に統一し、「要確認」表記を削除</div>
+<details class="faq"><summary>最低ロットや初期費用はありますか？</summary>
         <div class="fa">貴サロンの規模に合わせて、無料相談でご案内します。</div></details>
       <details class="faq"><summary>在庫リスクはありますか？</summary>
         <div class="fa">アイテムは4つのみ。在庫は最小限です。返品条件は無料相談でご説明します。</div></details>
@@ -673,7 +709,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <p class="sec-tag reveal">Company</p>
     <h2 class="sec-ttl reveal">2社の専門性が<br>生んだブランド</h2>
     <div class="sec-bar reveal"></div>
-    <div class="corp reveal">
+    <div class="diff "><b>▶ 変更点：会社概要</b><span class="o">前回</span>各社の説明2行＋注釈ボックス<br><span class="n">今回</span>説明1行に短縮し、注釈ボックスを削除。ロゴは600×115のまま</div>
+<div class="corp reveal">
       <div class="corp-box"><div class="cn2">株式会社リベルタ</div><div class="cx">マーケティング・PR・販促設計を担当。</div></div>
       <div class="corp-box"><div class="cn2">株式会社アフラ</div><div class="cx">コンセプト設計・処方開発・製造を担当するOEMメーカー。</div></div>
     </div>
@@ -686,7 +723,8 @@ body.js-anim .bar-fl.growing { animation: barGrow 1.2s cubic-bezier(.22,1,.36,1)
     <div class="sec-bar"></div>
     <p class="sec-lead" style="margin-bottom:20px;">所要30分／費用0円／契約の強要なし</p>
 
-    <div class="form-card">
+    <div class="diff "><b>▶ 変更点：お問い合わせフォーム（今回追加）</b><span class="o">前回</span>最下部は「予約」「LINE」ボタンのみ（現行LPの外部Googleフォームへの遷移が課題）<br><span class="n">今回</span>最下部にフォームを設置し、全CTAをここへ遷移。項目はlatinou LPと同一：会社名・サロン名／ご担当者名／メールアドレス／電話番号／サロンURL／お問い合わせ種別／ご質問・ご要望。最終CTA（旧CTA-D）は削除。送信先は未接続（サブドメインでのメール転送設定後に有効化）</div>
+<div class="form-card">
       <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)" novalidate>
         <div class="hp" aria-hidden="true">
           <label for="website">website</label>
@@ -780,6 +818,13 @@ function toggleAnno() {
   var b = document.getElementById('annoSw');
   b.classList.toggle('off', off);
   b.textContent = off ? '📐 画像サイズ表示 OFF（タップでON）' : '📐 画像サイズ表示 ON（タップでOFF）';
+}
+
+function toggleDiff() {
+  var off = document.body.classList.toggle('no-diff');
+  var b = document.getElementById('diffSw');
+  b.classList.toggle('off', off);
+  b.textContent = off ? '📝 前回との変更点 OFF（タップでON）' : '📝 前回との変更点 ON（タップでOFF）';
 }
 
 /* ── 製品データ ── */
