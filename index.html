@@ -111,6 +111,7 @@ body.no-anno .img-slot::after, body.no-anno .img-slot .spec { display: none; }
 /* ══════════ 注釈：前回LP（8/14版）との差分 ══════════ */
 .diff { background: var(--blue-lt); border: 1.5px dashed var(--blue); border-radius: 8px; padding: 10px 12px; margin: 14px 0; font-size: 11px; line-height: 1.7; color: var(--ink); text-align: left; }
 .diff b { display: block; font-size: 11.5px; color: var(--blue-d); margin-bottom: 3px; }
+.diff .u { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 0 6px; border-radius: 2px; margin-right: 6px; color: #fff; background: var(--ink); }
 .diff .o, .diff .n { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 0 6px; border-radius: 2px; margin-right: 6px; color: #fff; background: #8e8a91; }
 .diff .n { background: var(--blue-d); }
 .diff.top { margin: 0; border-radius: 0; border-left: 0; border-right: 0; }
@@ -218,6 +219,7 @@ body.no-diff .diff { display: none; }
 .pt-tx { font-size: 12.5px; color: var(--text); line-height: 1.8; }
 
 /* ══════════ ⑧ 製品 ══════════ */
+.collection { width: 78%; margin: 0 auto 20px; aspect-ratio: 1200 / 1158; background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
 .prods { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
 .prod { background: var(--white); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
 .prod .ph { background: var(--bg); aspect-ratio: 1 / 1; padding: 12px; }
@@ -291,7 +293,7 @@ body.no-diff .diff { display: none; }
 .corp-box { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
 .corp-box .cn2 { font-size: 14px; font-weight: 800; color: var(--blue-d); margin-bottom: 4px; }
 .corp-box .cx { font-size: 12.5px; color: var(--text); line-height: 1.8; }
-.corp-logo { width: 148px; aspect-ratio: 600 / 115; margin: 0 auto 20px; }
+.corp-logo { width: 190px; aspect-ratio: 1367 / 333; margin: 0 auto 20px; }
 
 /* ══════════ お問い合わせフォーム（latinou LPと同一項目） ══════════ */
 #contact { background: var(--bg); padding: 48px 20px 52px; scroll-margin-top: 54px; }
@@ -382,7 +384,7 @@ body.no-diff .diff { display: none; }
 <div id="wrap">
 
   <header id="hd">
-    <img src="https://fan.liberta.net/skinimalist/img/logo.png" alt="Skinimalist" width="115" height="22">
+    <img src="assets/logo-03.png" alt="Skinimalist" width="167" height="22">
     <a href="#contact" class="hd-btn">お問い合わせ</a>
   </header>
   <div class="diff top"><b>▶ 全体の変更点（前回：LP_260814 SP版 → 今回）</b>
@@ -390,8 +392,9 @@ body.no-diff .diff { display: none; }
       <li><b style="display:inline;color:var(--ink)">色：</b>紺×ゴールド → <b style="display:inline">#9dbde4（アテンション）／#f5f5f5（背景）／#6C676E（文字）</b>の3色基調に変更</li>
       <li><b style="display:inline;color:var(--ink)">テキスト：</b>各セクションを言い切り・端的な表現に短縮。補足説明・タグ・「要確認」注記は削除</li>
       <li><b style="display:inline;color:var(--ink)">CTA：</b>「予約」「LINE」の2動線 → 最下部のお問い合わせフォームへの遷移に一本化</li>
-      <li><b style="display:inline;color:var(--ink)">画像：</b>使用画像14点・依頼サイズ（720×1240／720×540／758×432／288²／600×115）は変更なし。製品画像は追加依頼なし。枠いっぱいに切り取る表示（cover）を、全体が見える表示（contain）に変更</li>
+      <li><b style="display:inline;color:var(--ink)">画像：</b>使用画像・依頼サイズ（720×1240／720×540／758×432／288²）は変更なし。枠いっぱいに切り取る表示（cover）を、全体が見える表示（contain）に変更</li>
       <li><b style="display:inline;color:var(--ink)">構成：</b>セクションの順序は前回と同じ。削除＝収支シミュレーション／中間・最終CTA（紺背景）／PC用サイドCTA。追加＝最下部のお問い合わせフォーム</li>
+      <li><b style="display:inline;color:var(--ink)"><span class="u">10/30</span>正式素材に差し替え：</b>トップ＝Skinimalist_KV-01／コンセプト＝Skinimalist_説明／製品4点＝個別の商品画像（透明な余白のみ除去・縦横比は維持）／ロゴ＝Skinimalistロゴ-03（ヘッダー）・ロゴ-04（会社概要）。「商品画像」（4製品の集合）を製品ラインナップの冒頭に追加。KV-02は未使用（予備）</li>
     </ul>
   </div>
 
@@ -399,12 +402,12 @@ body.no-diff .diff { display: none; }
   <section id="fv">
     <div id="fv-img" class="img-slot">
       <div class="spec" onclick="this.classList.toggle('open')">
-        <span class="badge new">差替予定</span>720×1240px
-        <div class="spec-detail">春のビューティーワールドジャパンで使用したキービジュアル（PNG・文字入り・720×1240px）に差し替え。現在は仮画像です。</div>
+        <span class="badge">差替済</span>720×1240px
+        <div class="spec-detail">正式素材「Skinimalist_KV-01.png」（720×1240px）を挿入済み。画像は切り取らず全体を表示しています。</div>
       </div>
-      <img class="fit" src="https://fan.liberta.net/skinimalist/img/top_sp.jpg" alt="Skinimalist キービジュアル">
+      <img class="fit" src="assets/kv-01.png" alt="Skinimalist キービジュアル 驚異の「水、0%」">
     </div>
-    <div class="diff "><b>▶ 変更点：トップ（FV）</b><span class="o">前回</span>背景画像の上にコピー・ボタンを重ねて表示。ボタンは「オンライン無料相談」と「LINE資料請求」の2つ<br><span class="n">今回</span>キービジュアルを全面表示し、テキスト・ボタンは画像の下に配置。ボタンは1つ（フォームへ遷移）。画像は720×1240pxのまま</div>
+    <div class="diff "><b>▶ 変更点：トップ（FV）</b><span class="o">前回</span>背景画像の上にコピー・ボタンを重ねて表示。ボタンは「オンライン無料相談」と「LINE資料請求」の2つ<br><span class="n">今回</span>キービジュアルを全面表示し、テキスト・ボタンは画像の下に配置。ボタンは1つ（フォームへ遷移）。画像は720×1240pxのまま<br><span class="u">10/30</span>仮画像を正式素材「Skinimalist_KV-01」（720×1240px）に差し替え。画像内に「驚異の「水、0%」」「Aqua-less®」の表記あり</div>
 <div id="fv-text">
       <div class="eyebrow">FOR SALON OWNER</div>
       <h1>施術の手を止めずに、<br>売上をもう一段。</h1>
@@ -475,12 +478,12 @@ body.no-diff .diff { display: none; }
     <div class="sec-bar reveal"></div>
     <div class="img-slot hero-img reveal">
       <div class="spec" onclick="this.classList.toggle('open')">
-        <span class="badge new">仮配置</span>720×540px
-        <div class="spec-detail">4製品を並べた集合写真（720×540px）に差し替え予定。現在は現行LPの画像を仮置きしています。</div>
+        <span class="badge">差替済</span>720×540px（4:3）
+        <div class="spec-detail">正式素材「Skinimalist_説明.png」（1500×1125px）を挿入済み。枠と同じ4:3のため、切り取りなしでぴったり収まります。</div>
       </div>
-      <img class="fit" src="https://fan.liberta.net/skinimalist/img/concern_sp.jpg" alt="Skinimalist 製品ラインナップ">
+      <img class="fit" src="assets/setsumei.png" alt="“水の無い”美容成分100%ローション。人気No.1・敏感肌対応。悩みに合わせて選べる美容液3種">
     </div>
-    <div class="diff "><b>▶ 変更点：コンセプト</b><span class="o">前回</span>説明文2段落（約110字）。画像は現行LPの縦長画像をそのまま配置<br><span class="n">今回</span>説明文2行に短縮。画像は720×540pxの枠に全体表示（仮配置のまま・差替予定）</div>
+    <div class="diff "><b>▶ 変更点：コンセプト</b><span class="o">前回</span>説明文2段落（約110字）。画像は現行LPの縦長画像をそのまま配置<br><span class="n">今回</span>説明文2行に短縮。画像は720×540pxの枠に全体表示（仮配置のまま・差替予定）<br><span class="u">10/30</span>仮画像を正式素材「Skinimalist_説明」（4:3）に差し替え。画像内に「“水の無い”美容成分100%」「人気No.1」「敏感肌対応」の表記あり</div>
 <p style="font-size:14px; line-height:1.95; text-align:center;" class="reveal">
       化粧水の主成分は「水」。<br>
       Skinimalistは水を使わず、<br>
@@ -549,9 +552,14 @@ body.no-diff .diff { display: none; }
     <p class="sec-tag reveal">Line Up</p>
     <h2 class="sec-ttl reveal">4アイテムで、<br>肌悩みを全方位に。</h2>
     <div class="sec-bar reveal"></div>
+    <div class="collection img-slot reveal">
+      <div class="spec" onclick="this.classList.toggle('open')"><span class="badge">追加</span>1200×1158
+        <div class="spec-detail">正式素材「商品画像.png」（1836×1772px）を縦横比そのままで縮小して配置。</div></div>
+      <img class="fit" src="assets/collection.png" alt="Skinimalist 4製品の集合写真">
+    </div>
     <div class="prods reveal">
       <div class="prod">
-        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product1.png" alt="エッセンスリッチローション"></div>
+        <div class="ph"><img class="fit" src="assets/product1.png" alt="エッセンスリッチローション"></div>
         <div class="in">
           <div class="cat">水の無いローション</div>
           <div class="nm">エッセンスリッチ<br>ローション</div>
@@ -561,7 +569,7 @@ body.no-diff .diff { display: none; }
         </div>
       </div>
       <div class="prod">
-        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product2.png" alt="シラタマアンプル"></div>
+        <div class="ph"><img class="fit" src="assets/product2.png" alt="シラタマアンプル"></div>
         <div class="in">
           <div class="cat">ブライトニング美容液</div>
           <div class="nm">シラタマアンプル</div>
@@ -571,7 +579,7 @@ body.no-diff .diff { display: none; }
         </div>
       </div>
       <div class="prod">
-        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product3.png" alt="ラディアンスピール"></div>
+        <div class="ph"><img class="fit" src="assets/product3.png" alt="ラディアンスピール"></div>
         <div class="in">
           <div class="cat">ふき取り不要の角質ケア</div>
           <div class="nm">ラディアンスピール</div>
@@ -581,7 +589,7 @@ body.no-diff .diff { display: none; }
         </div>
       </div>
       <div class="prod">
-        <div class="ph"><img class="fit" src="https://fan.liberta.net/skinimalist/img/product4.png" alt="グラナアンプル"></div>
+        <div class="ph"><img class="fit" src="assets/product4.png" alt="グラナアンプル"></div>
         <div class="in">
           <div class="cat">エイジングケア美容液</div>
           <div class="nm">グラナアンプル</div>
@@ -592,7 +600,7 @@ body.no-diff .diff { display: none; }
       </div>
     </div>
 
-    <div class="diff "><b>▶ 変更点：製品ラインナップ</b><span class="o">前回</span>製品下の「在庫は最小限」の補足帯あり。製品画像は縦横比がバラバラのまま並ぶ<br><span class="n">今回</span>補足帯を削除。製品画像は4点とも同じ大きさの枠（背景は薄いグレー）に統一して表示。画像の追加・再書き出しは不要。悩み別画像4点（758×432）は変更なし</div>
+    <div class="diff "><b>▶ 変更点：製品ラインナップ</b><span class="o">前回</span>製品下の「在庫は最小限」の補足帯あり。製品画像は縦横比がバラバラのまま並ぶ<br><span class="n">今回</span>補足帯を削除。製品画像は4点とも同じ大きさの枠（背景は薄いグレー）に統一して表示。画像の追加・再書き出しは不要。悩み別画像4点（758×432）は変更なし<br><span class="u">10/30</span>製品画像4点を正式素材に差し替え（透明な余白のみ除去・縦横比は維持）。冒頭に「商品画像」（4製品の集合）を追加</div>
 <div class="concerns reveal">
       <div class="concern">
         <div class="img-slot cimg">
@@ -698,14 +706,14 @@ body.no-diff .diff { display: none; }
   <!-- ══════════ ⑰ 会社 ══════════ -->
   <section class="sec gray">
     <div class="img-slot corp-logo reveal">
-      <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px;"><span class="badge" style="font-size:7.5px;">流用</span>600×115
-        <div class="spec-detail">logo.png を600×115pxで使用。</div></div>
-      <img class="fit" src="https://fan.liberta.net/skinimalist/img/logo.png" alt="Skinimalist">
+      <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px;"><span class="badge" style="font-size:7.5px;">差替済</span>1367×333
+        <div class="spec-detail">正式素材「Skinimalistロゴ-04.png」（透過PNG）を使用。透明な余白のみ除去し、縦横比は維持。</div></div>
+      <img class="fit" src="assets/logo-04.png" alt="Skinimalist Aqua-less">
     </div>
     <p class="sec-tag reveal">Company</p>
     <h2 class="sec-ttl reveal">2社の専門性が<br>生んだブランド</h2>
     <div class="sec-bar reveal"></div>
-    <div class="diff "><b>▶ 変更点：会社概要</b><span class="o">前回</span>各社の説明2行＋注釈ボックス<br><span class="n">今回</span>説明1行に短縮し、注釈ボックスを削除。ロゴは600×115のまま</div>
+    <div class="diff "><b>▶ 変更点：会社概要</b><span class="o">前回</span>各社の説明2行＋注釈ボックス<br><span class="n">今回</span>説明1行に短縮し、注釈ボックスを削除。ロゴは600×115のまま<br><span class="u">10/30</span>ロゴを正式素材「Skinimalistロゴ-04」に差し替え。ヘッダーのロゴも「ロゴ-03」に差し替え</div>
 <div class="corp reveal">
       <div class="corp-box"><div class="cn2">株式会社リベルタ</div><div class="cx">マーケティング・PR・販促設計を担当。</div></div>
       <div class="corp-box"><div class="cn2">株式会社アフラ</div><div class="cx">コンセプト設計・処方開発・<br>製造を担当するOEMメーカー。</div></div>
@@ -825,13 +833,13 @@ function toggleDiff() {
 
 /* ── 製品データ ── */
 var PRODUCTS = [
-  { img:'https://fan.liberta.net/skinimalist/img/product1.png', cat:'水の無いローション', nm:'エッセンスリッチローション', pr:'¥4,800（税別）',
+  { img:'assets/product1.png', cat:'水の無いローション', nm:'エッセンスリッチローション', pr:'¥4,800（税別）',
     dc:'水を使わない、オールインワンのとろみ美容液ローション。', ft:['Aqua-less®処方・美容成分100%','敏感肌にも使える人気No.1'] },
-  { img:'https://fan.liberta.net/skinimalist/img/product2.png', cat:'ブライトニング美容液', nm:'シラタマアンプル', pr:'¥6,000（税別）',
+  { img:'assets/product2.png', cat:'ブライトニング美容液', nm:'シラタマアンプル', pr:'¥6,000（税別）',
     dc:'シミ・くすみ・色むらに、集中アプローチ。', ft:['使うほど実感が積み上がる','単品からライン提案へつなげやすい'] },
-  { img:'https://fan.liberta.net/skinimalist/img/product3.png', cat:'ふき取り不要の角質ケア', nm:'ラディアンスピール', pr:'¥4,200（税別）',
+  { img:'assets/product3.png', cat:'ふき取り不要の角質ケア', nm:'ラディアンスピール', pr:'¥4,200（税別）',
     dc:'毛穴・ニキビ・ごわつきを、やさしくケア。', ft:['ふき取り不要で肌に負担が少ない','入門アイテムとして提案しやすい'] },
-  { img:'https://fan.liberta.net/skinimalist/img/product4.png', cat:'エイジングケア美容液', nm:'グラナアンプル', pr:'¥6,500（税別）',
+  { img:'assets/product4.png', cat:'エイジングケア美容液', nm:'グラナアンプル', pr:'¥6,500（税別）',
     dc:'しわ・たるみ・たるみ毛穴へ。次世代型レチノール配合。', ft:['次世代型レチノール配合','客単価を引き上げるアップセル商材'] }
 ];
 function openP(i) {
