@@ -214,7 +214,8 @@ body.no-diff .diff { display: none; }
 .pt-hd { background: var(--bg); color: var(--ink); padding: 10px 14px; font-size: 12px; letter-spacing: .1em; font-weight: 800; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line); }
 .pt-hd i { color: var(--blue); font-style: normal; font-weight: 900; font-size: 15px; }
 .pt-bd { padding: 15px; display: flex; gap: 14px; align-items: center; }
-.pt-bd .ico { width: 74px; flex-shrink: 0; aspect-ratio: 1 / 1; border-radius: 6px; overflow: hidden; background: var(--bg); }
+.ico-svg { width: 76px; height: 76px; flex-shrink: 0; border-radius: 18px; background: var(--blue-lt); display: flex; align-items: center; justify-content: center; }
+.ico-svg svg { width: 54px; height: 54px; display: block; }
 .pt-ttl { font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1.5; margin-bottom: 4px; }
 .pt-tx { font-size: 12.5px; color: var(--text); line-height: 1.8; }
 
@@ -393,7 +394,7 @@ body.no-diff .diff { display: none; }
       <li><b style="display:inline;color:var(--ink)">色：</b>紺×ゴールド → <b style="display:inline">#9dbde4（アテンション）／#f5f5f5（背景）／#6C676E（文字）</b>の3色基調に変更</li>
       <li><b style="display:inline;color:var(--ink)">テキスト：</b>各セクションを言い切り・端的な表現に短縮。補足説明・タグ・「要確認」注記は削除</li>
       <li><b style="display:inline;color:var(--ink)">CTA：</b>「予約」「LINE」の2動線 → 最下部のお問い合わせフォームへの遷移に一本化</li>
-      <li><b style="display:inline;color:var(--ink)">画像：</b>使用画像・依頼サイズ（720×1240／720×540／758×432／288²）は変更なし。枠いっぱいに切り取る表示（cover）を、全体が見える表示（contain）に変更</li>
+      <li><b style="display:inline;color:var(--ink)">画像：</b>使用画像・依頼サイズ（720×1240／720×540／758×432）は変更なし。枠いっぱいに切り取る表示（cover）を、全体が見える表示（contain）に変更</li>
       <li><b style="display:inline;color:var(--ink)">構成：</b>セクションの順序は前回と同じ。削除＝収支シミュレーション／中間・最終CTA（紺背景）／PC用サイドCTA。追加＝最下部のお問い合わせフォーム</li>
       <li><b style="display:inline;color:var(--ink)"><span class="u">10/30</span>正式素材に差し替え：</b>トップ＝Skinimalist_KV-01／コンセプト＝Skinimalist_説明／製品4点＝個別の商品画像（透明な余白のみ除去・縦横比は維持）／ロゴ＝Skinimalistロゴ-03（ヘッダー）・ロゴ-04（会社概要）。「商品画像」（4製品の集合）を製品ラインナップの冒頭に追加。KV-02は未使用（予備）</li>
     </ul>
@@ -509,16 +510,12 @@ body.no-diff .diff { display: none; }
     <p class="sec-tag reveal">3 Reasons</p>
     <h2 class="sec-ttl reveal">「良い商品」ではなく<br><em>「売れる商品」</em>です。</h2>
     <div class="sec-bar reveal"></div>
-    <div class="diff "><b>▶ 変更点：3つの理由</b><span class="o">前回</span>見出し＋説明文3行＋タグ2つ<br><span class="n">今回</span>見出し＋説明1文。タグは削除。アイコン画像は288²のまま</div>
+    <div class="diff "><b>▶ 変更点：3つの理由</b><span class="o">前回</span>見出し＋説明文3行＋タグ2つ<br><span class="n">今回</span>見出し＋説明1文。タグは削除。小さくて内容が読めなかったアイコン画像（288²）を、内容に合わせたアイコン（価格＝¥コイン／顧客管理＝4アイテム／接客＝吹き出し）に差し替え。画像の用意は不要</div>
 <div class="pts">
       <div class="pt reveal">
         <div class="pt-hd"><i>01</i> “売れる”価格</div>
         <div class="pt-bd">
-          <div class="img-slot ico">
-            <div class="spec" onclick="this.classList.toggle('open')" style="font-size:8px; padding:2px 5px; max-width:92%;"><span class="badge" style="font-size:7.5px;">流用</span>288px²
-              <div class="spec-detail">aqualess_point1.png を288×288pxで使用。</div></div>
-            <img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point1.png" alt="売れる価格">
-          </div>
+          <div class="ico-svg" aria-hidden="true"><svg viewBox="0 0 48 48" width="46" height="46" fill="none"><circle cx="24" cy="24" r="18" fill="#9dbde4" stroke="#4F80B3" stroke-width="2.4"/><circle cx="24" cy="24" r="13" stroke="#fff" stroke-width="1.6"/><text x="24" y="31" text-anchor="middle" font-size="20" font-weight="800" fill="#4A464D" font-family="Noto Sans JP,Hiragino Sans,Meiryo,sans-serif">¥</text></svg></div>
           <div>
             <div class="pt-ttl">定価5,000円前後。</div>
             <div class="pt-tx">買いやすく、リピートされる価格。<br>値引きに頼りません。</div>
@@ -528,7 +525,7 @@ body.no-diff .diff { display: none; }
       <div class="pt reveal">
         <div class="pt-hd"><i>02</i> “売れる”顧客管理</div>
         <div class="pt-bd">
-          <div class="img-slot ico"><img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point2.png" alt="売れる顧客管理"></div>
+          <div class="ico-svg" aria-hidden="true"><svg viewBox="0 0 48 48" width="46" height="46" fill="none"><rect x="6" y="6" width="16" height="16" rx="4.5" fill="#9dbde4" stroke="#4F80B3" stroke-width="2.4"/><rect x="26" y="6" width="16" height="16" rx="4.5" fill="#fff" stroke="#4F80B3" stroke-width="2.4"/><rect x="6" y="26" width="16" height="16" rx="4.5" fill="#fff" stroke="#4F80B3" stroke-width="2.4"/><rect x="26" y="26" width="16" height="16" rx="4.5" fill="#9dbde4" stroke="#4F80B3" stroke-width="2.4"/><path d="M10.5 14.5l3.2 3.2 5-6.2" stroke="#4A464D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M30.5 34.5l3.2 3.2 5-6.2" stroke="#4A464D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <div>
             <div class="pt-ttl">アイテムは4つだけ。</div>
             <div class="pt-tx">悩み別に迷わず提案。<br>在庫の負担も最小です。</div>
@@ -538,7 +535,7 @@ body.no-diff .diff { display: none; }
       <div class="pt reveal">
         <div class="pt-hd"><i>03</i> “売れる”接客</div>
         <div class="pt-bd">
-          <div class="img-slot ico"><img class="fit" src="https://fan.liberta.net/skinimalist/img/aqualess_point3.png" alt="売れる接客"></div>
+          <div class="ico-svg" aria-hidden="true"><svg viewBox="0 0 48 48" width="46" height="46" fill="none"><path d="M9 4h18a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H18l-6 5v-5H9a5 5 0 0 1-5-5V9a5 5 0 0 1 5-5z" fill="#9dbde4" stroke="#4F80B3" stroke-width="2.4" stroke-linejoin="round"/><circle cx="12" cy="14" r="1.9" fill="#4A464D"/><circle cx="18" cy="14" r="1.9" fill="#4A464D"/><circle cx="24" cy="14" r="1.9" fill="#4A464D"/><g transform="translate(0 4)"><path d="M30 24h9a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-1v4l-5-4h-3a5 5 0 0 1-5-5v-6a5 5 0 0 1 5-5z" fill="#fff" stroke="#4F80B3" stroke-width="2.4" stroke-linejoin="round"/><path d="M29 29.5h10M29 34h6" stroke="#4A464D" stroke-width="2" stroke-linecap="round"/></g></svg></div>
           <div>
             <div class="pt-ttl">新人でもできる鉄則カウンセリング。</div>
             <div class="pt-tx">端的な訴求で、<br>お客様から声がかかります。</div>
