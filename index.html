@@ -222,7 +222,8 @@ body.no-diff .diff { display: none; }
 .collection { width: 78%; margin: 0 auto 20px; aspect-ratio: 1200 / 1158; background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
 .prods { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
 .prod { background: var(--white); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-.prod .ph { background: var(--bg); aspect-ratio: 1 / 1; padding: 12px; }
+.prod .ph { background: var(--bg); aspect-ratio: 1 / 1; position: relative; }
+.prod .ph .fit { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); }
 .prod .in { padding: 10px 11px 8px; flex: 1; display: flex; flex-direction: column; }
 .prod .cat { font-size: 10px; color: var(--blue-d); font-weight: 700; }
 .prod .nm { font-size: 12px; font-weight: 800; color: var(--ink); line-height: 1.4; margin: 3px 0 4px; min-height: 2.8em; }
