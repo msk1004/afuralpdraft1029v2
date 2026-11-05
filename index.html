@@ -134,7 +134,8 @@ body.no-kvcopy .kv-copy { display: none; }
 .offer small { display: block; font-size: 10.5px; font-weight: 400; color: var(--text); margin-top: 4px; }
 .voice .vsub { margin-top: 8px; font-size: 11.5px; color: var(--text); line-height: 1.7; }
 .voice .vsub b { color: var(--ink); }
-.voice .av { font-size: 20px; font-weight: 800; color: var(--blue-d); background: var(--blue-lt); border: none; }
+.voice .av { width: 64px; font-size: 22px; font-weight: 800; color: var(--blue-d); background: var(--blue-lt); border: none; position: relative; overflow: hidden; }
+.voice .av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--white); }
 .voices-note { margin-top: 12px; font-size: 10.5px; color: #8e8a91; text-align: center; }
 .mbox .mnote { font-size: 10.5px; color: var(--text); margin-top: 10px; line-height: 1.7; }
 .corp-box .cx-sub { margin-top: 6px; font-size: 11px; color: #8e8a91; }
@@ -665,25 +666,26 @@ body.no-kvcopy .kv-copy { display: none; }
     <div class="diff "><b>▶ 変更点：導入サロンの声</b><span class="o">前回</span>構成は同じ。注釈ボックスあり<br><span class="n">今回</span>注釈を削除。サロン名・数字は引き続き◯◯の仮置き（掲載許諾後に反映）。写真枠は200×200<br><span class="u">11/4</span>先方回答の実事例3件（Mサロン／Sサロン／Iサロン）に差し替え。写真は掲載不可のため、頭文字のアイコンで表示。数字・リピート率・売り方も掲載</div>
 <div class="voices reveal">
       <div class="voice">
-        <div class="vh"><div class="av">M</div><div><div class="vn">Mサロン様</div><div class="vm">東京都／エステティックサロン<br>スタッフ2名・3席／導入 2024年5月</div></div></div>
+        <div class="vh"><div class="av">M<img src="assets/owner-m.png" alt="" onload="document.getElementById('ai-note').style.display='block'" onerror="this.remove()"></div><div><div class="vn">Mサロン様</div><div class="vm">東京都／エステティックサロン<br>スタッフ2名・3席／導入 2024年5月</div></div></div>
         <div class="vt">課題：店販が売れない。<br>決め手：価格・ラインナップ・<br>施術からの販売導線。<br>結果：開店以来はじめて、売上が右肩上がりに。</div>
         <div class="vr">店販売上 <b>月3万円未満 → 月10万円</b></div>
         <div class="vsub"><b>リピート率</b> 9割／<b>客単価</b> 1万円／<b>購入率</b> 8割<br><b>売り方：</b>施術に取り入れ・施術中の結果見せ<br>初回コースにセット・ショート動画</div>
       </div>
       <div class="voice">
-        <div class="vh"><div class="av">S</div><div><div class="vn">Sサロン様</div><div class="vm">愛知県／アイサロン<br>1名・1席／導入 2025年5月</div></div></div>
+        <div class="vh"><div class="av">S<img src="assets/owner-s.png" alt="" onload="document.getElementById('ai-note').style.display='block'" onerror="this.remove()"></div><div><div class="vn">Sサロン様</div><div class="vm">愛知県／アイサロン<br>1名・1席／導入 2025年5月</div></div></div>
         <div class="vt">課題：客単価を上げたい（スタッフは雇わない）。<br>決め手：価格・コンセプト・使いやすさ。<br>結果：施術売上だけの不安が解消。</div>
         <div class="vr">店販売上 <b>0円 → 月6万円</b></div>
         <div class="vsub"><b>リピート率</b> 9割／<b>客単価</b> 5千円／<b>購入率</b> 7割<br><b>売り方：</b>専用POP・3週間以内の来店者に割引</div>
       </div>
       <div class="voice">
-        <div class="vh"><div class="av">I</div><div><div class="vn">Iサロン様</div><div class="vm">大阪府／メディカルエステ<br>スタッフ5名・6席／導入 2025年10月</div></div></div>
+        <div class="vh"><div class="av">I<img src="assets/owner-i.png" alt="" onload="document.getElementById('ai-note').style.display='block'" onerror="this.remove()"></div><div><div class="vn">Iサロン様</div><div class="vm">大阪府／メディカルエステ<br>スタッフ5名・6席／導入 2025年10月</div></div></div>
         <div class="vt">課題：未経験者への店販指導。<br>決め手：シンプルな販売導線と、マニュアル化された販売トーク。<br>結果：未経験スタッフや看護師も、<br>店販売上をつくれるように。</div>
         <div class="vr">店販売上 <b>月10万円 → 月50万円</b></div>
         <div class="vsub"><b>リピート率</b> 7割／<b>客単価</b> 1.5万円／<b>購入率</b> 5割<br><b>売り方：</b>専用カウンセリングシート・専用POP<br>サブスク会員に特別価格</div>
       </div>
     </div>
     <p class="voices-note">※ 取扱サロンへのヒアリングに基づく事例です。成果はサロンにより異なります。</p>
+    <p class="voices-note" id="ai-note" style="display:none; margin-top:4px;">※ 人物写真はイメージ（AI生成）です。実在のサロン様の写真ではありません。</p>
   </section>
 
   <!-- ══════════ ⑬ 流れ ══════════ -->
